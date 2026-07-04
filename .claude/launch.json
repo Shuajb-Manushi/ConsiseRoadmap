@@ -4,7 +4,7 @@
     {
       "name": "concise-roadmaps",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "concise-roadmaps", "--", "--port", "5199"],
+      "runtimeArgs": ["run", "dev", "--", "--port", "5199"],
       "port": 5199
     }
   ]
