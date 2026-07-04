@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { Topic, Resource } from "../data/types";
 import type { Route } from "../lib/useHashRoute";
 import { topicById } from "../data/topics";
@@ -11,6 +12,11 @@ export function TopicDetail({ topic, navigate }: { topic: Topic; navigate: (r: R
   const nexts = topic.nextIds.map((id) => topicById.get(id)).filter(Boolean) as Topic[];
   const relatedMilestones = milestones.filter((m) => m.unlockedBy.includes(topic.id));
   const primary = topic.resources.primary[0];
+
+  const labRef = useRef<HTMLElement>(null);
+  const masteryRef = useRef<HTMLElement>(null);
+  const scrollTo = (ref: React.RefObject<HTMLElement>) =>
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
     <article className="container detail-page topic-detail">
@@ -32,6 +38,45 @@ export function TopicDetail({ topic, navigate }: { topic: Topic; navigate: (r: R
       <section className="detail-section detail-why">
         <h2>Why this matters</h2>
         <p>{topic.whyItMatters}</p>
+      </section>
+
+      {/* ---------- LEARNING PLAN ---------- */}
+      <section className="detail-section learning-plan" aria-label="Your learning plan">
+        <h2>Your learning plan</h2>
+        <ol className="plan-steps">
+          <li className="plan-step">
+            <div className="plan-step__head">
+              <span className="plan-step__label">Learn</span>
+              <span className="plan-step__hint">Start with the recommended resource — it teaches; the references below can wait.</span>
+            </div>
+            {primary ? (
+              <ResourceCard resource={primary} primary />
+            ) : (
+              <p className="detail-hint">No primary resource assigned yet — start from the lab below.</p>
+            )}
+            {topic.resources.primary.slice(1).map((r, i) => (
+              <ResourceCard key={i} resource={r} primary />
+            ))}
+          </li>
+          <li className="plan-step">
+            <div className="plan-step__head">
+              <span className="plan-step__label">Build</span>
+              <span className="plan-step__hint">Do the practical lab — understanding is built, not watched.</span>
+            </div>
+            <button className="plan-step__jump" onClick={() => scrollTo(labRef)}>
+              Go to the lab: {topic.lab.title} ↓
+            </button>
+          </li>
+          <li className="plan-step">
+            <div className="plan-step__head">
+              <span className="plan-step__label">Prove</span>
+              <span className="plan-step__hint">Check yourself against the mastery list before moving on.</span>
+            </div>
+            <button className="plan-step__jump" onClick={() => scrollTo(masteryRef)}>
+              Go to the mastery checks ↓
+            </button>
+          </li>
+        </ol>
       </section>
 
       {prereqs.length > 0 && (
@@ -65,7 +110,7 @@ export function TopicDetail({ topic, navigate }: { topic: Topic; navigate: (r: R
       </div>
 
       {/* ---------- LAB ---------- */}
-      <section className="detail-section lab">
+      <section className="detail-section lab" ref={labRef}>
         <div className="lab__label offset"><span>Practical lab</span></div>
         <h2 className="lab__title">{topic.lab.title}</h2>
         <p className="lab__scenario">{topic.lab.scenario}</p>
@@ -101,7 +146,7 @@ export function TopicDetail({ topic, navigate }: { topic: Topic; navigate: (r: R
       </section>
 
       {/* ---------- MASTERY ---------- */}
-      <section className="detail-section mastery">
+      <section className="detail-section mastery" ref={masteryRef}>
         <h2>You've mastered this when you can…</h2>
         <ul className="tick-list tick-list--check">
           {topic.masteryChecks.map((m, i) => <li key={i}>{m}</li>)}
@@ -117,7 +162,7 @@ export function TopicDetail({ topic, navigate }: { topic: Topic; navigate: (r: R
 
       {/* ---------- RESOURCES ---------- */}
       <section className="detail-section resources">
-        <h2>Recommended resource</h2>
+        <h2>Start learning here</h2>
         {primary ? (
           <ResourceCard resource={primary} primary />
         ) : (
@@ -128,9 +173,27 @@ export function TopicDetail({ topic, navigate }: { topic: Topic; navigate: (r: R
         ))}
 
         {topic.resources.alternatives.length > 0 && (
-          <Disclosure summary="Don't like this explanation? Try these alternatives">
+          <>
+            <h3 className="resources__subhead">Try another explanation</h3>
             <div className="resource-alts">
               {topic.resources.alternatives.map((r, i) => <ResourceCard key={i} resource={r} />)}
+            </div>
+          </>
+        )}
+
+        {topic.resources.practice.length > 0 && (
+          <>
+            <h3 className="resources__subhead">Practice and visual tools</h3>
+            <div className="resource-alts">
+              {topic.resources.practice.map((r, i) => <ResourceCard key={i} resource={r} />)}
+            </div>
+          </>
+        )}
+
+        {topic.resources.extra.length > 0 && (
+          <Disclosure summary={`Extra reading & references (${topic.resources.extra.length})`}>
+            <div className="resource-alts">
+              {topic.resources.extra.map((r, i) => <ResourceCard key={i} resource={r} />)}
             </div>
           </Disclosure>
         )}
@@ -184,7 +247,14 @@ function ResourceCard({ resource, primary }: { resource: Resource; primary?: boo
         <span className="resource-card__ext" aria-hidden="true">↗</span>
       </div>
       <span className="resource-card__title">{resource.title}</span>
-      <span className="resource-card__note">{resource.note}</span>
+      {(resource.provider || resource.duration) && (
+        <span className="resource-card__meta">
+          {resource.provider}
+          {resource.provider && resource.duration ? " · " : ""}
+          {resource.duration}
+        </span>
+      )}
+      <span className="resource-card__note">{resource.guidance ?? resource.note}</span>
       <span className="visually-hidden"> (opens in a new tab)</span>
     </a>
   );

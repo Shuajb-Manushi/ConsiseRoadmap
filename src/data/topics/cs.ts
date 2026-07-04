@@ -67,11 +67,15 @@ export const csTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.nand2tetris, note: "Weeks 1–3: Boolean logic and arithmetic built from gates — representation from first principles." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/0/", guidance: "Watch the representation segment of the Week 0 lecture (first ~40 min): binary, ASCII, Unicode, RGB — everything is bytes plus an agreed interpretation." },
       ],
       alternatives: [
-        { ...R.mitMath, note: "The logic and proofs unit formalizes the Boolean algebra used here." },
-        { ...R.cppref, note: "The numeric-limits and floating-point pages for exact C-side guarantees." },
+        { ...R.benEaterTwos, guidance: "The negative-numbers half of this topic, from the master of bit-level explanation." },
+        { ...R.nand2tetris, note: "Weeks 1–3: Boolean logic and arithmetic built from gates — representation from first principles." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.cppref, guidance: "The numeric-limits and floating-point pages for exact C-side guarantees." },
       ],
     },
     masteryChecks: [
@@ -148,11 +152,17 @@ export const csTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.opendsa, note: "The algorithm-analysis chapters — rigorous but readable, with exercises." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/3/", guidance: "Watch the Week 3 'Algorithms' lecture (~2 h): linear vs. binary search and sorting growth rates, demonstrated with actual humans as array elements." },
       ],
       alternatives: [
-        { ...R.visualgo, note: "Sorting visualizations show growth-rate differences viscerally." },
-        { ...R.mitMath, note: "Asymptotics lectures for the formal definitions behind the notation." },
+        { ...R.fisetDS, guidance: "The 'Complexity Analysis' chapter at the start of the course — Big-O in 30 minutes with worked examples." },
+      ],
+      practice: [
+        { ...R.visualgo, guidance: "Sorting page: race bubble sort against merge sort on 50, then 500 elements — growth rates made visceral." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "The algorithm-analysis chapters — rigorous but readable, with exercises." },
+        { ...R.mitMath, guidance: "Asymptotics lectures for the formal definitions behind the notation." },
       ],
     },
     masteryChecks: [
@@ -229,11 +239,15 @@ export const csTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.opendsa, note: "The recursion chapters with visual call-tree exercises." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/3/", guidance: "Rewatch the recursion segment of the Week 3 lecture, then draw the full call tree for factorial(4) by hand before opening the lab." },
       ],
-      alternatives: [
-        { ...R.visualgo, note: "The recursion tree visualizations for divide-and-conquer intuition." },
-        { ...R.exercismPy, note: "Later, redo two backtracking exercises in Python for contrast." },
+      alternatives: [],
+      practice: [
+        { ...R.pythonTutor, guidance: "Step through a recursive function and watch frames stack and unwind — the single best recursion aid there is." },
+        { ...R.visualgo, guidance: "The recursion-tree visualizations for divide-and-conquer intuition." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "The recursion chapters with visual call-tree exercises." },
       ],
     },
     masteryChecks: [
@@ -312,11 +326,15 @@ export const csTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.visualgo, note: "Watch each sort animate on different data shapes before implementing." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/3/", guidance: "Watch the Week 3 lecture in full if you haven't — its sorting comparisons are exactly this lab's subject matter." },
       ],
-      alternatives: [
-        { ...R.opendsa, note: "Sorting chapters with the analysis behind every claim your memo makes." },
-        { ...R.godbolt, note: "Compare your quicksort's codegen against qsort for a constant-factor reality check." },
+      alternatives: [],
+      practice: [
+        { ...R.visualgo, guidance: "Use the Sorting visualization in Training mode: predict each algorithm's next step, then implement the bake-off." },
+        { ...R.godbolt, guidance: "Compare your quicksort's codegen against qsort for a constant-factor reality check." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "Sorting chapters with the analysis behind every claim your memo makes." },
       ],
     },
     masteryChecks: [
@@ -395,11 +413,16 @@ export const csTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.visualgo, note: "The single-source shortest-path visualization — step Dijkstra by hand first." },
+        { ...R.fisetGraphs, guidance: "Watch the 'Dijkstra's Algorithm' chapter plus the BFS shortest-path chapter (~1 h). The Bellman-Ford chapter is optional depth." },
       ],
       alternatives: [
-        { ...R.opendsa, note: "Graph algorithm chapters with the correctness argument spelled out." },
         { ...R.mitMath, note: "Graph theory lectures for the underlying formalism." },
+      ],
+      practice: [
+        { ...R.visualgo, guidance: "Single-Source Shortest Paths page: step Dijkstra by hand on a small graph before implementing it." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "Graph algorithm chapters with the correctness argument spelled out." },
       ],
     },
     masteryChecks: [
@@ -474,11 +497,15 @@ export const csTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.opendsa, note: "The finite-automata chapters connect the practice to the theory." },
+        { ...R.mitStateMachines, guidance: "Watch the lecture. It leans mathematical, but its invariant-thinking is exactly what makes your tokenizer and connection simulator correct." },
       ],
-      alternatives: [
-        { ...R.ostep, note: "Preview the TCP discussion — see a production state machine specified as a diagram." },
-        { ...R.mitMath, note: "State machines appear in the proofs unit as objects you can reason about formally." },
+      alternatives: [],
+      practice: [
+        { ...R.regexone, guidance: "Every regex you write is a finite automaton — do lessons 1–10 and notice the state transitions you're describing." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "The finite-automata chapters connect the practice to the theory." },
+        { ...R.ostep, guidance: "Preview the TCP discussion — see a production state machine specified as a diagram." },
       ],
     },
     masteryChecks: [
@@ -553,11 +580,14 @@ export const csTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mitMath, note: "Units on induction, counting, and probability — do the psets for the units used here." },
+        { ...R.mitMath, guidance: "Watch the lecture videos for the counting and probability units (permutations, combinations, conditional probability) and do those units' problem sets." },
       ],
-      alternatives: [
-        { ...R.opendsa, note: "Its analysis chapters ground the same math in data-structure behavior." },
-        { ...R.visualgo, note: "Hashing visualization to see the balls-into-bins story animate." },
+      alternatives: [],
+      practice: [
+        { ...R.visualgo, guidance: "Hashing visualization — the balls-into-bins story, animated." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "Its analysis chapters ground the same math in data-structure behavior." },
       ],
     },
     masteryChecks: [

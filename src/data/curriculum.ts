@@ -2,9 +2,9 @@ import type { Difficulty } from "./types";
 import { branches, branchById } from "./branches";
 import { topics, topicById, topicsByBranch } from "./topics";
 import { milestones } from "./milestones";
-import { R, resourceSubjects } from "./resourceCatalog";
+import { R, resourcePurposes } from "./resourceCatalog";
 
-export { branches, branchById, topics, topicById, topicsByBranch, milestones, R, resourceSubjects };
+export { branches, branchById, topics, topicById, topicsByBranch, milestones, R, resourcePurposes };
 
 /** The learner's customized starting point. */
 export const startHere = {

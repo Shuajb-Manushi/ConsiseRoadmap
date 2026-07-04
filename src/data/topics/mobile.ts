@@ -71,11 +71,15 @@ export const mobileTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.expoTutorial, note: "The official Expo tutorial — the fastest path to an app on your phone." },
+        { ...R.expoTutorial, guidance: "Do the tutorial start to finish — by the end you'll have a real app with navigation running on your own phone." },
       ],
       alternatives: [
-        { ...R.rnSetup, note: "The React Native environment guide for the toolchain details." },
-        { ...R.reactLearn, note: "Revisit React fundamentals — they're 90% of what you need here." },
+        { ...R.fullStackOpen, url: "https://fullstackopen.com/en/part10/", guidance: "Part 10 sections a–b: React Native taught as a university course, if you want more rigor than the tutorial." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.rnSetup, guidance: "The React Native environment guide for the toolchain details." },
+        { ...R.reactLearn, guidance: "Revisit React fundamentals — they're 90% of what you need here." },
       ],
     },
     masteryChecks: [
@@ -155,11 +159,15 @@ export const mobileTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.expoTutorial, note: "Covers data, device APIs, and building — then extend to your API integration." },
+        { ...R.fullStackOpen, url: "https://fullstackopen.com/en/part10/", guidance: "Part 10 sections c–d: communicating with a server and testing — the data layer this lab needs, with exercises." },
       ],
       alternatives: [
-        { ...R.rnSetup, note: "For deeper platform and build details." },
-        { ...R.owasp, note: "OWASP has mobile-specific guidance; the secure-storage and transport principles apply directly." },
+        { ...R.expoTutorial, guidance: "The later tutorial chapters cover device storage and APIs the Expo way." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.rnSetup, guidance: "For deeper platform and build details." },
+        { ...R.owasp, guidance: "OWASP has mobile-specific guidance; the secure-storage and transport principles apply directly." },
       ],
     },
     masteryChecks: [

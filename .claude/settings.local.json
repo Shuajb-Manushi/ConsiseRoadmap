@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\USER\\\\Documents\\\\FableRoadmapWeb\\\\concise-roadmaps\")",
-      "PowerShell(node --version)",
-      "PowerShell(npm --version)"
-    ]
-  }
-}

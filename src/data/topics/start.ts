@@ -65,12 +65,17 @@ export const startTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "Chapter 1–2: how C programs are built and run." },
-        { ...R.godbolt, note: "See the compiler's actual output for any snippet you're curious about." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/1/", guidance: "Watch the Week 1 'C' lecture (~2 h). Pay special attention to the opening segment on how source becomes a running program; the rest doubles as your C refresher." },
       ],
       alternatives: [
+        { ...R.cpuLand, guidance: "Read chapters 1–3 — the 'what actually happens when you run a program' story, with pictures." },
         { ...R.nand2tetris, note: "If you want the full from-transistors story, this course builds the whole stack." },
-        { ...R.missingSemester, note: "The 'course overview + the shell' lecture sets up everything else here." },
+      ],
+      practice: [
+        { ...R.godbolt, guidance: "Paste a 5-line C program, map every source line to its assembly, then switch to -O2 and watch it change." },
+      ],
+      extra: [
+        { ...R.beejC, guidance: "Chapters 1–2: how C programs are built and run." },
       ],
     },
     masteryChecks: [
@@ -144,11 +149,13 @@ export const startTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.missingSemester, note: "Lectures 1–2 (shell tools) are this topic, taught by MIT." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/course-shell/", guidance: "Watch 'Course Overview + The Shell' (~50 min) and complete every exercise at the bottom; then do the 'Shell Tools and Scripting' lecture the same way." },
       ],
-      alternatives: [
-        { ...R.bandit, note: "Learn the same skills by solving levels — many people find this stickier than lectures." },
+      alternatives: [],
+      practice: [
+        { ...R.bandit, guidance: "Solve levels 0–10 — each level forces exactly one new shell skill. Many people find this stickier than lectures." },
       ],
+      extra: [],
     },
     masteryChecks: [
       "Find all files modified in the last day containing a keyword, without touching a GUI",
@@ -223,10 +230,14 @@ export const startTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.missingSemester, note: "The 'editors' lecture — philosophy of investing in your tools." },
+        { ...R.vscodeIntroVideos, guidance: "Watch 'Getting started', 'Code editing', and 'Debugging' (~30 min total), pausing to try each shortcut in your own editor." },
       ],
       alternatives: [
-        { ...R.gdbDocs, note: "VS Code's C debugger drives GDB underneath — knowing GDB explains what the UI is doing." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/editors/", guidance: "The Editors (Vim) lecture — a different philosophy of editor mastery; the 'invest in your tools' argument applies to VS Code too." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.gdbDocs, guidance: "VS Code's C debugger drives GDB underneath — knowing GDB explains what the UI is doing." },
       ],
     },
     masteryChecks: [
@@ -301,11 +312,16 @@ export const startTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.proGit, note: "Chapters 1–3 — the clearest explanation of the Git model in print." },
+        { ...R.learnGitBranching, guidance: "Complete the 'Main: Introduction Sequence' and the first 'Remote' lessons — type every command yourself and watch the commit graph respond." },
       ],
       alternatives: [
-        { ...R.githubSkills, note: "Interactive if the book feels dry — you learn inside real repositories." },
-        { ...R.missingSemester, note: "The Git lecture teaches the data model first, which many find clarifying." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/version-control/", guidance: "Watch the Version Control lecture (~1.5 h) — it teaches the data model first, which many find clarifying." },
+      ],
+      practice: [
+        { ...R.githubSkills, guidance: "Do the 'Introduction to GitHub' course — you learn inside a real repository." },
+      ],
+      extra: [
+        { ...R.proGit, guidance: "Chapters 1–3 — the clearest explanation of the Git model in print. Read after the interactive lessons." },
       ],
     },
     masteryChecks: [
@@ -381,10 +397,14 @@ export const startTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.missingSemester, note: "The 'debugging and profiling' lecture matches this method exactly." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/debugging-profiling/", guidance: "Watch the first half of 'Debugging and Profiling' (~40 min — debuggers and logging) and do exercises 1–3. Profiling can wait." },
       ],
-      alternatives: [
-        { ...R.gdbDocs, note: "When you're ready to drive the debugger from the terminal, the manual's 'Sample GDB session' is the fastest start." },
+      alternatives: [],
+      practice: [
+        { ...R.pythonTutor, guidance: "Paste code you don't fully understand and step it line by line — train yourself to predict before observing." },
+      ],
+      extra: [
+        { ...R.gdbDocs, guidance: "When you're ready to drive the debugger from the terminal, the manual's 'Sample GDB session' is the fastest start." },
       ],
     },
     masteryChecks: [
@@ -459,10 +479,13 @@ export const startTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "The macros and function-pointer sections give you the tools the harness needs." },
+        { ...R.cs50p, url: "https://cs50.harvard.edu/python/weeks/5/", guidance: "Watch the Week 5 'Unit Tests' lecture (~45 min). It's taught in Python, but every idea — arrange-act-assert, edge cases, one behavior per test — transfers directly to the C harness you'll build." },
       ],
-      alternatives: [
-        { ...R.pytestDocs, note: "Skim 'How to write tests' to see where this vocabulary reappears in Python later." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.beejC, guidance: "The macros and function-pointer sections give you the tools the harness needs." },
+        { ...R.pytestDocs, guidance: "Skim 'How to write tests' to see where this vocabulary reappears in Python later." },
       ],
     },
     masteryChecks: [
@@ -538,11 +561,13 @@ export const startTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.missingSemester, note: "The metaprogramming/course-overview material models this 'think in systems' habit." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/0/", guidance: "Watch the Week 0 lecture (~2 h) — it is entirely about decomposing problems into precise computational steps. Ignore that the language is Scratch; the discipline is the point." },
       ],
       alternatives: [
         { ...R.mitMath, note: "The first proof lectures train the same muscle: making claims precise enough to verify." },
       ],
+      practice: [],
+      extra: [],
     },
     masteryChecks: [
       "Turn any vague one-sentence request into 8+ testable requirements in fifteen minutes",

@@ -70,11 +70,14 @@ export const securityTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.owasp, note: "The Top 10 as a structured catalog of what goes wrong — your threat-modeling checklist." },
+        { ...R.shostackTM, guidance: "Watch the whole playlist (~30 min of 2-minute lessons). The four questions are the entire method — apply them in the lab immediately." },
       ],
       alternatives: [
-        { ...R.portswigger, note: "Its learning materials frame vulnerabilities with the defensive and ethical context." },
-        { ...R.bandit, note: "A legal, ethical place to start building hands-on skills immediately." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/security/", guidance: "The Security and Cryptography lecture for the technical-fundamentals side (hashing, entropy, TLS)." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.owasp, guidance: "The Top 10 as a structured catalog of what goes wrong — your threat-modeling checklist." },
       ],
     },
     masteryChecks: [
@@ -154,11 +157,12 @@ export const securityTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.bandit, note: "The primary hands-on, legal environment for this topic." },
+        { ...R.bandit, guidance: "Play levels 0–20, keeping notes: each level is one Linux security concept you'll then harden against in the lab's second half." },
       ],
-      alternatives: [
-        { ...R.ostep, note: "For the process and privilege mechanisms underneath." },
-        { ...R.missingSemester, note: "The security-and-cryptography and shell lectures reinforce the fundamentals." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.ostep, guidance: "For the process and privilege mechanisms underneath." },
       ],
     },
     masteryChecks: [
@@ -240,11 +244,13 @@ export const securityTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.portswigger, note: "The definitive free, legal, hands-on labs for every web vulnerability class." },
+        { ...R.portswigger, guidance: "Follow the SQL injection, XSS, and access-control learning paths in order; complete every apprentice-level lab before moving to practitioner." },
       ],
-      alternatives: [
-        { ...R.owasp, note: "The Top 10 for the structured catalog and defensive guidance." },
-        { ...R.fastapiTutorial, note: "Revisit its security sections to confirm your defenses match best practice." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.owasp, guidance: "The Top 10 for the structured catalog and defensive guidance." },
+        { ...R.fastapiTutorial, guidance: "Revisit its security sections to confirm your defenses match best practice." },
       ],
     },
     masteryChecks: [
@@ -326,11 +332,15 @@ export const securityTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pwnCollege, note: "University-grade, sanctioned binary-exploitation course with its own legal practice infrastructure." },
+        { ...R.pwnCollege, guidance: "Do the memory-corruption ('Program Security') module: watch each lecture, then solve its challenges on their sanctioned infrastructure." },
       ],
-      alternatives: [
-        { ...R.owasp, note: "The Cryptographic Failures entry for the crypto-misuse catalog." },
-        { ...R.ostep, note: "For the memory-protection mechanisms the mitigations build on." },
+      alternatives: [],
+      practice: [
+        { ...R.cryptohack, guidance: "The 'General' and 'Symmetric Ciphers' tracks — applied crypto learned by legally breaking toy implementations." },
+      ],
+      extra: [
+        { ...R.owasp, guidance: "The Cryptographic Failures entry for the crypto-misuse catalog." },
+        { ...R.ostep, guidance: "For the memory-protection mechanisms the mitigations build on." },
       ],
     },
     masteryChecks: [
@@ -411,11 +421,17 @@ export const securityTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.wireshark, note: "The official documentation for capture and analysis." },
+        { ...R.wiresharkGreer, guidance: "Watch the first few lessons with Wireshark open, analyzing a capture of your own traffic as you go." },
       ],
       alternatives: [
-        { ...R.pwnCollege, note: "Has reverse-engineering modules in a sanctioned environment." },
-        { ...R.godbolt, note: "For understanding the compilation your reverse engineering undoes." },
+        { ...R.practicalNetworking, guidance: "If the protocol layers feel shaky, revisit the protocol lessons first." },
+      ],
+      practice: [
+        { ...R.pwnCollege, guidance: "The reverse-engineering module, in a sanctioned environment." },
+        { ...R.godbolt, guidance: "For understanding the compilation your reverse engineering undoes." },
+      ],
+      extra: [
+        { ...R.wireshark, guidance: "The official documentation for capture and analysis." },
       ],
     },
     masteryChecks: [

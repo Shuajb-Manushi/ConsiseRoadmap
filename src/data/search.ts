@@ -39,6 +39,8 @@ function build(): SearchDoc[] {
       // resource names are searchable per the spec
       ...t.resources.primary.map((r) => r.title),
       ...t.resources.alternatives.map((r) => r.title),
+      ...t.resources.practice.map((r) => r.title),
+      ...t.resources.extra.map((r) => r.title),
     ];
     docs.push({
       id: t.id,

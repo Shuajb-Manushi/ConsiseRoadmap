@@ -69,11 +69,17 @@ export const pythonTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pyTutorial, note: "Sections 3–5 and 9.9+ (data structures, iterators) — quick for a C programmer." },
+        { ...R.cs50p, url: "https://cs50.harvard.edu/python/weeks/0/", guidance: "Skim the Week 0–2 lectures at higher speed — you already program; you're watching for how Python does it. Slow down wherever Python surprises you (names vs. boxes, truthiness, for-else)." },
       ],
       alternatives: [
-        { ...R.automate, note: "Chapters 1–6 if you prefer learning via little automation tasks over the tutorial's tour." },
-        { ...R.exercismPy, note: "A dozen small exercises to make syntax automatic." },
+        { ...R.pyTutorial, guidance: "Sections 3–5 and 9.9+ (data structures, iterators) — a faster text route for a C programmer." },
+      ],
+      practice: [
+        { ...R.pythonTutor, guidance: "Step through list-aliasing examples and watch two names point at one object — the C-to-Python mental shift, visualized." },
+        { ...R.exercism, title: "Exercism — Python Track", url: "https://exercism.org/tracks/python", guidance: "A dozen small exercises to make the syntax automatic." },
+      ],
+      extra: [
+        { ...R.automate, guidance: "Chapters 1–6 if you prefer learning via little automation tasks." },
       ],
     },
     masteryChecks: [
@@ -151,11 +157,17 @@ export const pythonTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pyTutorial, note: "Sections 4 (functions), 6 (modules), 8 (errors) — then write the lab." },
+        { ...R.cs50p, url: "https://cs50.harvard.edu/python/weeks/3/", guidance: "Watch the Week 3 'Exceptions' lecture (~1 h), then the Week 4 'Libraries' lecture for modules and imports — the two pillars of this topic." },
       ],
       alternatives: [
-        { ...R.automate, note: "Its functions and debugging chapters teach the same material by doing." },
-        { ...R.pytestDocs, note: "Peek at fixtures — you'll recognize decorators and context managers immediately." },
+        { ...R.pyTutorial, guidance: "Sections 4 (functions), 6 (modules), 8 (errors) — then write the lab." },
+      ],
+      practice: [
+        { ...R.exercism, title: "Exercism — Python Track", url: "https://exercism.org/tracks/python", guidance: "Do a few exercises using exceptions and higher-order functions." },
+      ],
+      extra: [
+        { ...R.automate, guidance: "Its functions and debugging chapters teach the same material by doing." },
+        { ...R.pytestDocs, guidance: "Peek at fixtures — you'll recognize decorators and context managers immediately." },
       ],
     },
     masteryChecks: [
@@ -233,11 +245,17 @@ export const pythonTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.automate, note: "The files, organizing, and pattern-matching chapters map 1:1 to this lab." },
+        { ...R.cs50p, url: "https://cs50.harvard.edu/python/weeks/6/", guidance: "Watch Week 6 'File I/O' (~1 h), then Week 7 'Regular Expressions' (~1 h) — the two halves of this topic, taught brilliantly." },
       ],
       alternatives: [
-        { ...R.pyTutorial, note: "Section 10–11 tour the stdlib modules used here." },
-        { ...R.pytestDocs, note: "tmp_path fixture docs — purpose-built for testing exactly this kind of tool." },
+        { ...R.automate, guidance: "The files, organizing, and pattern-matching chapters map 1:1 to this lab." },
+      ],
+      practice: [
+        { ...R.regexone, guidance: "Lessons 1–15: each regex concept practiced against live test strings — do this before writing the duplicate detector's patterns." },
+      ],
+      extra: [
+        { ...R.pyTutorial, guidance: "Sections 10–11 tour the stdlib modules used here." },
+        { ...R.pytestDocs, guidance: "tmp_path fixture docs — purpose-built for testing exactly this kind of tool." },
       ],
     },
     masteryChecks: [
@@ -318,11 +336,16 @@ export const pythonTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pyTutorial, note: "Section 9 (classes), then the typing docs linked from it." },
+        { ...R.cs50p, url: "https://cs50.harvard.edu/python/weeks/8/", guidance: "Watch the Week 8 'Object-Oriented Programming' lecture (~1.5 h) — classes, properties, and dunder methods with live coding." },
       ],
       alternatives: [
-        { ...R.tsHandbook, note: "Surprisingly useful cross-training: TypeScript's handbook teaches type-thinking that transfers straight back to Python hints." },
-        { ...R.exercismPy, note: "The OO-focused exercises with mentor feedback on design." },
+        { ...R.pyTutorial, guidance: "Section 9 (classes), then the typing docs linked from it." },
+      ],
+      practice: [
+        { ...R.exercism, title: "Exercism — Python Track", url: "https://exercism.org/tracks/python", guidance: "The OO-focused exercises, with mentor feedback on design." },
+      ],
+      extra: [
+        { ...R.tsHandbook, guidance: "Surprisingly useful cross-training: TypeScript's handbook teaches type-thinking that transfers straight back to Python hints." },
       ],
     },
     masteryChecks: [
@@ -399,11 +422,16 @@ export const pythonTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pytestDocs, note: "'Get started' through fixtures and parametrize — the exact features this lab uses." },
+        { ...R.cs50p, url: "https://cs50.harvard.edu/python/weeks/5/", guidance: "Watch the Week 5 'Unit Tests' lecture (~45 min) — it teaches pytest itself. The lab then goes further with fixtures and parametrize." },
       ],
-      alternatives: [
-        { ...R.pyTutorial, note: "The venv and modules sections for the environment side." },
-        { ...R.automate, note: "Its CLI-adjacent chapters if argparse feels abstract." },
+      alternatives: [],
+      practice: [
+        { ...R.exercism, title: "Exercism — Python Track", url: "https://exercism.org/tracks/python", guidance: "Practice test-first: write the tests before the solution on your next three exercises." },
+      ],
+      extra: [
+        { ...R.pytestDocs, guidance: "'Get started' through fixtures and parametrize — the exact features this lab uses." },
+        { ...R.pyTutorial, guidance: "The venv and modules sections for the environment side." },
+        { ...R.automate, guidance: "Its CLI-adjacent chapters if argparse feels abstract." },
       ],
     },
     masteryChecks: [
@@ -483,11 +511,14 @@ export const pythonTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mdnCurriculum, note: "The HTTP sections — MDN's protocol material is the best plain-language reference." },
+        { ...R.coreyRequests, guidance: "Watch it fully, typing along — requests, JSON, and error handling. Then hit one real public API before starting the GitHub analyzer." },
       ],
       alternatives: [
-        { ...R.pyTutorial, note: "The urllib pointers in the stdlib tour." },
-        { ...R.fastapiTutorial, note: "Skim 'first steps' to see the server's view of the same requests you're sending." },
+        { ...R.apisForBeginners, guidance: "Units 1–2 explain HTTP and APIs from zero if you want the broader story first." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.fastapiTutorial, guidance: "Skim 'First Steps' to see the server's view of the same requests you're sending." },
       ],
     },
     masteryChecks: [
@@ -568,11 +599,15 @@ export const pythonTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pyTutorial, note: "Then the stdlib docs for concurrent.futures and asyncio linked from it — read ThreadPoolExecutor's examples." },
+        { ...R.coreyThreading, guidance: "Step 1: threads and ThreadPoolExecutor — watch and type along." },
+        { ...R.coreyMultiprocessing, guidance: "Step 2: processes for CPU-bound work, and why the GIL makes the difference." },
+        { ...R.coreyAsyncio, guidance: "Step 3: async/await and the event loop, explained with animations. Then build the checker all three ways." },
       ],
-      alternatives: [
-        { ...R.ostep, note: "The concurrency chapters — the formal grounding for the races you just produced." },
-        { ...R.automate, note: "Its scheduling/multithreading chapter for a gentler on-ramp." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.ostep, guidance: "The concurrency chapters — the formal grounding for the races you just produced." },
+        { ...R.pyTutorial, guidance: "The stdlib docs for concurrent.futures and asyncio — read ThreadPoolExecutor's examples." },
       ],
     },
     masteryChecks: [

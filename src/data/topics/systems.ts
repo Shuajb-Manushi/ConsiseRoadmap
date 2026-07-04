@@ -68,11 +68,16 @@ export const systemsTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.godbolt, note: "Your primary lab bench — C in, annotated assembly out, for every experiment here." },
+        { ...R.nand2tetris, guidance: "Part I, projects 4–5 (machine language, computer architecture): build the CPU that runs the assembly you're about to read." },
       ],
       alternatives: [
-        { ...R.nand2tetris, note: "Builds the CPU and machine language from logic gates — the deepest grounding." },
-        { ...R.ostep, note: "The mechanism chapters connect this to how the OS manages execution." },
+        { ...R.cpuLand, guidance: "Chapters 1–4: syscalls, privilege rings, and program execution — the modern-x86 story in plain language." },
+      ],
+      practice: [
+        { ...R.godbolt, guidance: "Your primary lab bench — C in, annotated assembly out, for every experiment here." },
+      ],
+      extra: [
+        { ...R.ostep, guidance: "The mechanism chapters connect this to how the OS manages execution." },
       ],
     },
     masteryChecks: [
@@ -154,11 +159,13 @@ export const systemsTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.ostep, note: "The virtualization/processes chapters and the API (fork/exec) chapter map directly to this lab." },
+        { ...R.cs537videos, guidance: "Watch the Virtualization videos on processes, the process API (fork/exec), and scheduling — they track the OSTEP chapters one-for-one." },
       ],
-      alternatives: [
-        { ...R.beejC, note: "For the C systems-call mechanics." },
-        { ...R.missingSemester, note: "The shell lectures for the user's-eye view of what you're building." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.ostep, guidance: "The virtualization/processes chapters and the API (fork/exec) chapter map directly to this lab." },
+        { ...R.beejC, guidance: "For the C systems-call mechanics." },
       ],
     },
     masteryChecks: [
@@ -237,11 +244,17 @@ export const systemsTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.ostep, note: "The entire virtual-memory section — paging, page tables, TLB, and protection." },
+        { ...R.cs537videos, guidance: "Watch the address-spaces, paging, and TLB videos in the Virtualization section." },
       ],
       alternatives: [
-        { ...R.godbolt, note: "Not for VM directly, but useful for seeing memory-access instructions." },
-        { ...R.nand2tetris, note: "For the hardware side of memory addressing." },
+        { ...R.cpuLand, guidance: "The memory chapters tell the same story with cartoons and real /proc output." },
+      ],
+      practice: [
+        { ...R.godbolt, guidance: "Not for VM directly, but useful for seeing memory-access instructions." },
+      ],
+      extra: [
+        { ...R.ostep, guidance: "The entire virtual-memory section — paging, page tables, TLB, and protection." },
+        { ...R.nand2tetris, guidance: "For the hardware side of memory addressing." },
       ],
     },
     masteryChecks: [
@@ -323,11 +336,17 @@ export const systemsTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.ostep, note: "The concurrency section — locks, condition variables, and common bugs — is the canonical treatment." },
+        { ...R.cs537videos, guidance: "Watch the Concurrency videos: threads, locks, and condition variables — then plant this lab's bugs deliberately." },
       ],
       alternatives: [
-        { ...R.beejC, note: "For the pthreads API mechanics." },
-        { ...R.godbolt, note: "To see how atomic operations compile — demystifying lock-free code." },
+        { ...R.sorberServer, guidance: "A compact live-coding take: real threads around real work, with the classic mistakes shown." },
+      ],
+      practice: [
+        { ...R.godbolt, guidance: "See how atomic operations compile — demystifying lock-free code." },
+      ],
+      extra: [
+        { ...R.ostep, guidance: "The concurrency section — locks, condition variables, and common bugs — is the canonical treatment." },
+        { ...R.beejC, guidance: "For the pthreads API mechanics." },
       ],
     },
     masteryChecks: [
@@ -409,11 +428,17 @@ export const systemsTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejNet, note: "The definitive free sockets guide — this lab is essentially its capstone." },
+        { ...R.sorberWebClient, guidance: "Step 1: watch and code along — socket(), connect(), send(), recv() from nothing." },
+        { ...R.sorberServer, guidance: "Step 2: the server side — bind, listen, accept, and a thread per connection." },
       ],
       alternatives: [
-        { ...R.wireshark, note: "For the packet-inspection portion." },
-        { ...R.ostep, note: "For the OS mechanisms (file descriptors, select) beneath the sockets." },
+        { ...R.practicalNetworking, guidance: "If TCP/UDP concepts feel shaky, the protocol lessons cover ports and handshakes first." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.beejNet, guidance: "The definitive free sockets guide — this lab is essentially its capstone; keep it open as the reference." },
+        { ...R.wireshark, guidance: "For the packet-inspection portion." },
+        { ...R.ostep, guidance: "For the OS mechanisms (file descriptors, select) beneath the sockets." },
       ],
     },
     masteryChecks: [

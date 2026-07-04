@@ -26,11 +26,16 @@ curriculum — all content lives in `src/data`.
    branch (used for ordering). Choose `required`, `difficulty`, and an honest
    `estimatedHours`.
 5. Fill the **lab** fully (requirements, checkpoints, hints, validation,
-   solutionOutline, extensions) and at least one **primary resource** and some
-   **mastery checks**. The tests enforce these.
+   solutionOutline, extensions) and the four resource tiers (`primary`,
+   `alternatives`, `practice`, `extra`) plus some **mastery checks**. The primary
+   must be a guided video/course/interactive tutorial/lab with exact instructions
+   in `guidance` (“Watch Lecture 2, sections 1–4” — never “great introduction”).
+   Books and docs go in `extra`. The tests enforce these.
 6. Use resources from `src/data/resourceCatalog.ts` via the `R` object so URLs stay in
-   one place: `{ ...R.pytestDocs, note: "topic-specific guidance here." }`. If you need a
-   new external resource, add it to the catalog first (title, url, type, note).
+   one place: `{ ...R.cs50x, url: "…/weeks/4/", guidance: "topic-specific instructions" }`.
+   If you need a new external resource, verify the URL actually loads, then add it to
+   the catalog (title, url, type, provider, note) and to a purpose group, and run
+   `npm run audit:resources`.
 7. Run `npm run test`.
 
 ## Correcting a topic

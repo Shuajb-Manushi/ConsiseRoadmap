@@ -70,10 +70,13 @@ export const backendTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pgTutorial, note: "The data-definition and constraints chapters — concise and authoritative." },
+        { ...R.cs50sql, url: "https://cs50.harvard.edu/sql/weeks/1/", guidance: "Watch Week 1 'Relating' (~1 h), then Week 2 'Designing' — keys, constraints, and schema design taught on real datasets." },
       ],
-      alternatives: [
-        { ...R.opendsa, note: "For the underlying set/relation theory if you want the formal grounding." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.pgTutorial, guidance: "The data-definition and constraints chapters — concise and authoritative." },
+        { ...R.opendsa, guidance: "For the underlying set/relation theory if you want the formal grounding." },
       ],
     },
     masteryChecks: [
@@ -154,10 +157,17 @@ export const backendTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pgTutorial, note: "The querying, joins, and aggregate chapters — practice each on your library data." },
+        { ...R.sqlbolt, guidance: "Complete lessons 1–12 in the browser — every clause practiced immediately against real tables. A couple of hours, permanently useful." },
       ],
       alternatives: [
-        { ...R.visualgo, note: "Not SQL-specific, but its join-adjacent set visualizations help the mental model." },
+        { ...R.cs50sql, url: "https://cs50.harvard.edu/sql/weeks/0/", guidance: "Week 0 'Querying' if you'd like a lecture treatment first." },
+      ],
+      practice: [
+        { ...R.sqlMurderMystery, guidance: "Solve the mystery — it forces joins and filtering with real motivation." },
+        { ...R.pgexercises, guidance: "The 'Basic' and 'Joins' exercise sets against a realistic schema." },
+      ],
+      extra: [
+        { ...R.pgTutorial, guidance: "The querying, joins, and aggregate chapters — reference while you practice." },
       ],
     },
     masteryChecks: [
@@ -235,10 +245,15 @@ export const backendTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pgTutorial, note: "The performance/EXPLAIN and transaction chapters, plus the official docs on indexes and isolation." },
+        { ...R.cs50sql, url: "https://cs50.harvard.edu/sql/weeks/5/", guidance: "Watch Week 5 'Optimizing' (~1 h): indexes, EXPLAIN, and transactions demonstrated on real queries. Rewatch Week 2 'Designing' for normalization." },
       ],
-      alternatives: [
-        { ...R.ostep, note: "The concurrency and persistence chapters ground transactions and durability at the systems level." },
+      alternatives: [],
+      practice: [
+        { ...R.pgexercises, guidance: "The 'Aggregates' set — then run EXPLAIN on your own slowest query and read the plan." },
+      ],
+      extra: [
+        { ...R.pgTutorial, guidance: "The performance/EXPLAIN and transaction chapters, plus the official docs on indexes and isolation." },
+        { ...R.ostep, guidance: "The concurrency and persistence chapters ground transactions and durability at the systems level." },
       ],
     },
     masteryChecks: [
@@ -317,10 +332,13 @@ export const backendTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.fastapiTutorial, note: "Its request/response and status-code sections model good REST conventions." },
+        { ...R.apisForBeginners, guidance: "Watch Units 1–2 (~1 h): what an API is and how HTTP verbs, URLs, and status codes combine — then design yours on paper." },
       ],
-      alternatives: [
-        { ...R.mdnCurriculum, note: "The HTTP reference for method and status-code semantics." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.fastapiTutorial, guidance: "Its request/response and status-code sections model good REST conventions." },
+        { ...R.mdnCurriculum, guidance: "The HTTP reference for method and status-code semantics." },
       ],
     },
     masteryChecks: [
@@ -402,11 +420,13 @@ export const backendTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.fastapiTutorial, note: "Work through it in order — one of the best framework tutorials in existence." },
+        { ...R.fastapiTutorial, guidance: "Work through 'First Steps' → 'Request Body' → the database sections in order, running every snippet. It reads like a course, not documentation — the reason it's the recommended start despite being 'docs'." },
       ],
-      alternatives: [
-        { ...R.pgTutorial, note: "For the database side of the integration." },
-        { ...R.pytestDocs, note: "For structuring the API test suite with fixtures and a test database." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.pgTutorial, guidance: "For the database side of the integration." },
+        { ...R.pytestDocs, guidance: "For structuring the API test suite with fixtures and a test database." },
       ],
     },
     masteryChecks: [
@@ -489,11 +509,14 @@ export const backendTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.fastapiTutorial, note: "The security section (OAuth2 with password flow, hashing, dependencies) implements exactly this." },
+        { ...R.portswigger, title: "PortSwigger Academy — Authentication", url: "https://portswigger.net/web-security/authentication", guidance: "Read the Authentication section and complete the first three apprentice labs — see auth break before you build it." },
       ],
       alternatives: [
-        { ...R.owasp, note: "The Broken Access Control and Cryptographic Failures entries — what you're defending against." },
-        { ...R.portswigger, note: "The authentication vulnerability labs to see these failures exploited (legally)." },
+        { ...R.fastapiTutorial, url: "https://fastapi.tiangolo.com/tutorial/security/", guidance: "The security tutorial (OAuth2 password flow, hashing, dependencies) is the build-side walkthrough of exactly this lab." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.owasp, guidance: "The Broken Access Control and Cryptographic Failures entries — what you're defending against." },
       ],
     },
     masteryChecks: [
@@ -575,11 +598,14 @@ export const backendTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.fastapiTutorial, note: "Its testing, background-tasks, and settings/config sections." },
+        { ...R.coreyLogging, guidance: "Watch 'Logging Basics', then the follow-up 'Logging Advanced' video on the same channel — then wire structured logging through the lab." },
       ],
-      alternatives: [
-        { ...R.pytestDocs, note: "For structuring the layered suite and database fixtures." },
-        { ...R.ghActions, note: "Preview: run this whole suite automatically in CI (the practice branch does this)." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.fastapiTutorial, guidance: "Its testing, background-tasks, and settings/config sections cover the rest of this topic." },
+        { ...R.pytestDocs, guidance: "For structuring the layered suite and database fixtures." },
+        { ...R.ghActions, guidance: "Preview: run this whole suite automatically in CI (the practice branch does this)." },
       ],
     },
     masteryChecks: [

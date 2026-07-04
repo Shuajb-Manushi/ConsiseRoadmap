@@ -79,7 +79,10 @@
 }
 .reslib-card__open { font-size: 0.82rem; font-weight: 600; }
 .reslib-card__title { font-size: 1.12rem; margin: 0; }
+.reslib-card__meta { font-size: 0.78rem; color: var(--ink-faint); font-family: var(--mono); margin: 0; }
 .reslib-card__note { font-size: 0.88rem; color: var(--ink-soft); margin: 0; flex: 1; }
+.reslib-card__audience { font-size: 0.82rem; color: var(--ink-faint); margin: 0; font-style: italic; }
+.reslib-blurb { font-size: 0.95rem; color: var(--ink-soft); margin: calc(-1 * var(--s3)) 0 var(--s4); max-width: 68ch; }
 .reslib-card__used { margin-top: var(--s2); }
 .reslib-card__used summary {
   cursor: pointer;

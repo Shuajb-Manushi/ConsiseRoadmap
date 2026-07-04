@@ -68,11 +68,15 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mdnCurriculum, note: "The 'how the web works' foundational modules — the clearest overview available." },
+        { ...R.codeOrgInternet, guidance: "Watch all eight short videos in order (~45 min): wires, IP & DNS, packets, HTTP, encryption. Then do the trace lab with the vocabulary fresh." },
       ],
       alternatives: [
-        { ...R.beejNet, note: "For the TCP/IP layer from the programmer's side — you'll build on it in systems." },
-        { ...R.missingSemester, note: "The networking-adjacent tooling lectures reinforce curl/dig fluency." },
+        { ...R.practicalNetworking, guidance: "Lessons 1–3 (hosts, networks, OSI model) if you want more technical depth than the series." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.beejNet, guidance: "For the TCP/IP layer from the programmer's side — you'll build on it in systems." },
+        { ...R.mdnCurriculum, guidance: "The 'how the web works' modules as a text refresher." },
       ],
     },
     masteryChecks: [
@@ -151,10 +155,14 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mdnCurriculum, note: "The HTML and accessibility modules — MDN is the definitive HTML source." },
+        { ...R.webDevHTML, guidance: "Work through the modules in order; don't skip 'Forms' and 'Accessibility' — they're this lab's core. Each module ends with a self-check." },
       ],
       alternatives: [
-        { ...R.mdnJs, note: "Not JS-specific here, but MDN's HTML element reference is the companion you'll keep open." },
+        { ...R.mdnLearnHtml, guidance: "MDN's guided HTML module with assessments, if you prefer MDN's voice." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.mdnCurriculum, guidance: "The structure and semantics modules as a coverage checklist." },
       ],
     },
     masteryChecks: [
@@ -235,11 +243,16 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mdnCurriculum, note: "The CSS modules — layout, responsive design, and organization." },
+        { ...R.webDevCSS, guidance: "Do the modules through 'Grid' before the lab; the later modules (functions, transitions) can wait until you need them." },
       ],
       alternatives: [
-        { ...R.mdnJs, note: "MDN's CSS reference (sibling to the JS guide) for exact property behavior." },
+        { ...R.mdnLearnCss, guidance: "MDN's guided CSS module — selectors, box model, and layout with challenges." },
       ],
+      practice: [
+        { ...R.flexboxFroggy, guidance: "All 24 levels before writing the layout system — flexbox becomes muscle memory." },
+        { ...R.gridGarden, guidance: "All 28 levels — the grid half of the same muscle memory." },
+      ],
+      extra: [],
     },
     masteryChecks: [
       "Explain why an element is where it is using box model + flow, on a layout you didn't write",
@@ -316,11 +329,16 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mdnJs, note: "The JavaScript Guide, read in order — the authoritative language reference." },
+        { ...R.jsInfo, guidance: "Part 1, chapters 1–9 (fundamentals through objects). Do the tasks at the end of every chapter — they're the point." },
       ],
       alternatives: [
-        { ...R.mdnCurriculum, note: "The scripting modules for a more guided path." },
-        { ...R.exercismPy, note: "Exercism has a JavaScript track too — small exercises to build fluency." },
+        { ...R.mdnLearnJs, guidance: "MDN's guided scripting module — the same ground in a different voice." },
+      ],
+      practice: [
+        { ...R.exercism, title: "Exercism — JavaScript Track", url: "https://exercism.org/tracks/javascript", guidance: "Small exercises to build fluency between lab sessions." },
+      ],
+      extra: [
+        { ...R.mdnJs, guidance: "The authoritative language reference — lookup, not first read." },
       ],
     },
     masteryChecks: [
@@ -399,11 +417,14 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mdnJs, note: "The DOM, events, and async/Promises sections — then the Fetch API page." },
+        { ...R.jsInfo, url: "https://javascript.info/document", guidance: "Part 2: work through 'Document' and 'Introduction to Events', plus Part 1's 'Promises, async/await' chapter and the 'Network requests: Fetch' chapter." },
       ],
       alternatives: [
-        { ...R.mdnCurriculum, note: "The dynamic-scripting and network-request modules for a guided path." },
-        { ...R.reactLearn, note: "Preview 'Thinking in React' to see the state→render idea you're building by hand." },
+        { ...R.mdnLearnJs, guidance: "The DOM-scripting, events, and network-request lessons for a guided path." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.mdnJs, guidance: "The DOM, events, and async/Promises sections — then the Fetch API page, as reference." },
       ],
     },
     masteryChecks: [
@@ -483,10 +504,15 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.tsHandbook, note: "The handbook front to back — 'Everyday Types' through 'Narrowing' and 'Generics' cover this lab." },
+        { ...R.totalTsBeginners, guidance: "Complete all 18 exercises — each is a failing snippet you make pass, with a video explanation after. Free; ignore the site's paid courses." },
       ],
-      alternatives: [
-        { ...R.mdnJs, note: "For any JS behavior the types are describing — keep it alongside." },
+      alternatives: [],
+      practice: [
+        { ...R.exercism, title: "Exercism — TypeScript Track", url: "https://exercism.org/tracks/typescript", guidance: "The TypeScript track exercises after the tutorial." },
+      ],
+      extra: [
+        { ...R.tsHandbook, guidance: "'Everyday Types' through 'Narrowing' and 'Generics' cover this lab — the reference behind the exercises." },
+        { ...R.mdnJs, guidance: "For any JS behavior the types are describing — keep it alongside." },
       ],
     },
     masteryChecks: [
@@ -568,11 +594,14 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.reactLearn, note: "The official interactive tutorial and 'Thinking in React' — modern, hook-first, excellent." },
+        { ...R.reactLearn, guidance: "Work through 'Describing the UI' → 'Managing State', trying every interactive sandbox; finish with 'Thinking in React' before the lab." },
       ],
       alternatives: [
-        { ...R.tsHandbook, note: "For typing components and props precisely." },
-        { ...R.mdnJs, note: "When you need to understand the JS/DOM behavior React sits on." },
+        { ...R.fullStackOpen, url: "https://fullstackopen.com/en/part1/", guidance: "Parts 1–2 teach the same material as a rigorous university course with graded exercises." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.tsHandbook, guidance: "For typing components and props precisely." },
       ],
     },
     masteryChecks: [
@@ -650,11 +679,15 @@ export const webTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.owasp, note: "The XSS and CSRF entries — authoritative descriptions of what you're defending against." },
+        { ...R.fullStackOpen, url: "https://fullstackopen.com/en/part5/", guidance: "Part 5 sections a–b: testing React components properly. Sections c–d (end-to-end testing) are optional but recommended." },
       ],
-      alternatives: [
-        { ...R.reactLearn, note: "React's docs on escaping and the dangers of dangerouslySetInnerHTML." },
-        { ...R.portswigger, note: "The XSS and CORS labs — legal, hands-on, and directly relevant (preview of the security branch)." },
+      alternatives: [],
+      practice: [
+        { ...R.portswigger, guidance: "The XSS and CSRF labs — legal, hands-on browser-security practice (and a preview of the security branch)." },
+      ],
+      extra: [
+        { ...R.owasp, guidance: "The XSS and CSRF entries — authoritative descriptions of what you're defending against." },
+        { ...R.reactLearn, guidance: "React's docs on escaping and the dangers of dangerouslySetInnerHTML." },
       ],
     },
     masteryChecks: [

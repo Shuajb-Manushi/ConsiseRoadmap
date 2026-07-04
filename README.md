@@ -31,8 +31,9 @@ trustworthy resources.
   catalog: every branch, topic, and milestone, with a branch jump list.
 - **Rich topic pages** — summary, why-it-matters, prerequisites, core ideas, practical
   uses, a substantial hands-on **lab** (requirements, checkpoints, progressive hints,
-  validation, solution architecture, extensions), mastery checks, a recommended
-  resource with a “Don’t like this explanation?” alternatives section, a security note,
+  validation, solution architecture, extensions), mastery checks, a **learning plan**
+  (Learn → Build → Prove) with one verified guided resource and exact instructions,
+  alternative explanations, practice tools, collapsed extra reading, a security note,
   and connections to later topics.
 - **10 cross-branch milestone projects** with full briefs (no copy-paste source code).
 - **Global search** (button or <kbd>Ctrl/Cmd</kbd>+<kbd>K</kbd>) over titles, concepts,
@@ -102,12 +103,18 @@ The curriculum philosophy (required vs. optional policy, milestone relationships
 
 `npm run test` runs Vitest over `src/data/*.test.ts`, verifying: unique ids; every
 prerequisite / next / milestone reference exists; the prerequisite graph is acyclic;
-required fields are populated; required topics have a primary resource; every topic has
-a lab and mastery checks; and that search indexes topics, concepts, projects, and
+required fields are populated; every topic has a guided primary resource (video,
+course, interactive tutorial, or lab — documented exceptions aside) with valid https
+URLs, a lab, and mastery checks; the resource catalog has unique ids and URLs; and that search indexes topics, concepts, projects, and
 resources. A dedicated `guided.test.ts` verifies the guided roadmap: every topic id
 exists, every topic appears exactly once, the phase ordering is a genuine topological
 sort (no topic precedes a prerequisite), and every milestone sits at/after the phase
 that unlocks it. `npm run build` additionally runs `tsc` for full type-checking.
+
+`npm run audit:resources` (optional, network) opens every resource URL with timeouts
+and limited concurrency, verifies YouTube links via oEmbed, and reports dead links —
+kept separate from `npm run test` because external sites can be temporarily down.
+See `RESOURCE_AUDIT.md` for the latest full audit.
 
 ## Deploying to GitHub Pages
 

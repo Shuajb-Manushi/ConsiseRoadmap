@@ -193,6 +193,50 @@
 }
 .security-note p { margin: 0; font-size: 0.95rem; color: var(--ink); }
 
+/* Learning plan */
+.learning-plan {
+  background: var(--canvas-deep);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--s5) var(--s5) var(--s4);
+  max-width: 74ch;
+}
+.plan-steps { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.plan-step { position: relative; padding-left: var(--s6); margin-bottom: var(--s4); counter-increment: step; }
+.plan-step::before {
+  content: counter(step);
+  position: absolute; left: 0; top: 0;
+  width: 24px; height: 24px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-family: var(--mono);
+}
+.plan-step__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s2); margin-bottom: var(--s2); }
+.plan-step__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--orange-deep);
+}
+.plan-step__hint { font-size: 0.88rem; color: var(--ink-faint); }
+.plan-step__jump {
+  display: inline-block;
+  background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: border-color 0.12s, transform 0.08s;
+}
+.plan-step__jump:hover { border-color: var(--ink); transform: translateY(-1px); }
+
 /* Resource cards */
 .resource-card {
   display: flex;
@@ -219,7 +263,9 @@
 }
 .resource-card__ext { color: var(--ink-faint); }
 .resource-card__title { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; }
+.resource-card__meta { font-size: 0.78rem; color: var(--ink-faint); font-family: var(--mono); }
 .resource-card__note { font-size: 0.88rem; color: var(--ink-soft); }
+.resources__subhead { font-size: 1.05rem; margin: var(--s5) 0 var(--s3); color: var(--ink); }
 .resource-alts { display: flex; flex-direction: column; }
 .resource-alts .resource-card { margin-bottom: var(--s2); }
 

@@ -68,11 +68,15 @@ export const practiceTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.githubSkills, note: "Its issues/project-management courses model stories and criteria in practice." },
+        { ...R.atlassianUserStories, guidance: "Read it fully (~15 min), then write this lab's user stories with its template before touching anything else. (An article as the primary is a deliberate exception — no free video teaches this better.)" },
       ],
       alternatives: [
-        { ...R.missingSemester, note: "The engineering-habits framing reinforces spec-before-code discipline." },
+        { ...R.googleTechWriting, guidance: "Acceptance criteria are technical writing — this short course sharpens exactly that." },
       ],
+      practice: [
+        { ...R.githubSkills, guidance: "The issues and project-planning courses model stories and criteria inside a real repository." },
+      ],
+      extra: [],
     },
     masteryChecks: [
       "Convert a one-line feature request into stories with testable acceptance criteria",
@@ -148,10 +152,16 @@ export const practiceTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.proGit, note: "Chapters on branching and distributed workflows — the canonical treatment." },
+        { ...R.learnGitBranching, guidance: "Complete the 'Remote' lessons — push, pull, fetch, and rebase animated. This is the collaboration model, visualized." },
       ],
       alternatives: [
-        { ...R.githubSkills, note: "Interactive PR, review, and merge-conflict courses inside real repos." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/version-control/", guidance: "The Git lecture's data-model-first approach makes merge conflicts unscary." },
+      ],
+      practice: [
+        { ...R.githubSkills, guidance: "Do 'Review pull requests' and 'Resolve merge conflicts' — inside real repositories." },
+      ],
+      extra: [
+        { ...R.proGit, guidance: "Chapters on branching and distributed workflows — the canonical written treatment." },
       ],
     },
     masteryChecks: [
@@ -229,11 +239,14 @@ export const practiceTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.reactLearn, note: "Its component-design guidance is a concrete, modern lesson in cohesion and interfaces." },
+        { ...R.codeAestheticNesting, guidance: "Watch this, then his naming and abstraction videos (~40 min total) — then open your own worst code and start the lab." },
       ],
       alternatives: [
-        { ...R.tsHandbook, note: "Type-driven design pushes you toward cohesive, well-interfaced code." },
-        { ...R.missingSemester, note: "Its philosophy sections on writing maintainable code." },
+        { ...R.ousterhoutTalk, guidance: "The deeper design philosophy behind the same instincts (~1 h)." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.refactoringGuru, guidance: "Put names to the smells you found and the refactorings you applied." },
       ],
     },
     masteryChecks: [
@@ -311,11 +324,14 @@ export const practiceTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.pytestDocs, note: "For the mechanics of levels, fixtures, and doubles in Python." },
+        { ...R.ianCooperTDD, guidance: "Watch in full (~1 h). The thesis — test behaviors through public APIs, not implementation details — is this topic's core, and it will save you from brittle suites." },
       ],
-      alternatives: [
-        { ...R.reactLearn, note: "For the frontend testing philosophy (behavior over implementation)." },
-        { ...R.fastapiTutorial, note: "Its testing section for API-level and integration testing patterns." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.testPyramid, guidance: "The essay version of the strategy, with concrete service examples." },
+        { ...R.pytestDocs, guidance: "For the mechanics of levels, fixtures, and doubles in Python." },
+        { ...R.fastapiTutorial, guidance: "Its testing section for API-level and integration testing patterns." },
       ],
     },
     masteryChecks: [
@@ -394,11 +410,16 @@ export const practiceTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.fastapiTutorial, note: "Its bigger-applications and dependency sections show framework-level boundary structuring." },
+        { ...R.ousterhoutTalk, guidance: "Watch in full (~1 h): deep modules, information leakage, and complexity — then architect the lab against everything he warns about." },
       ],
       alternatives: [
-        { ...R.reactLearn, note: "Frontend architecture (state placement, component boundaries) is the same discipline." },
-        { ...R.ostep, note: "The OS is a masterclass in layered abstractions and boundaries." },
+        { ...R.codeAestheticNesting, guidance: "His shorter videos on abstraction and dependencies, if an hour-long talk is a hard sell." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.refactoringGuru, guidance: "The design-patterns catalog — read patterns as vocabulary, not prescriptions." },
+        { ...R.fastapiTutorial, guidance: "Its bigger-applications and dependency sections show framework-level boundary structuring." },
+        { ...R.ostep, guidance: "The OS is a masterclass in layered abstractions and boundaries." },
       ],
     },
     masteryChecks: [
@@ -480,12 +501,17 @@ export const practiceTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.ghActions, note: "The workflow-syntax and quickstart docs — build the pipeline from these." },
-        { ...R.dockerStart, note: "The official get-started path through images, compose, and best practices." },
+        { ...R.dockerFullCourse, guidance: "Watch through the docker-compose chapter (roughly the first two-thirds); the closing chapters are optional." },
       ],
       alternatives: [
-        { ...R.fastapiTutorial, note: "Its deployment section for containerizing and running the service." },
-        { ...R.missingSemester, note: "The CI/automation lecture for the underlying philosophy." },
+        { ...R.dockerStart, guidance: "The official hands-on path through images, compose, and best practices — if you prefer doing over watching." },
+      ],
+      practice: [
+        { ...R.githubSkills, guidance: "The GitHub Actions courses — build a real CI workflow inside a real repository." },
+      ],
+      extra: [
+        { ...R.ghActions, guidance: "The workflow-syntax and quickstart docs — build the pipeline from these." },
+        { ...R.fastapiTutorial, guidance: "Its deployment section for containerizing and running the service." },
       ],
     },
     masteryChecks: [

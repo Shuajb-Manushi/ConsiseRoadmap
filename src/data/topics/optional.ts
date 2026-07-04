@@ -72,10 +72,15 @@ export const optionalTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "Not Rust-specific, but your C memory model is the prerequisite; the official Rust Book (doc.rust-lang.org/book) is the canonical free next step." },
+        { ...R.comprehensiveRust, guidance: "Work through days 1–3 (fundamentals through ownership, borrowing, and traits), doing each exercise as you reach it." },
       ],
-      alternatives: [
-        { ...R.ostep, note: "For the systems concepts Rust gives you safe access to." },
+      alternatives: [],
+      practice: [
+        { ...R.rustlings, guidance: "Run it alongside the course — fix broken Rust until the borrow checker feels like a colleague." },
+        { ...R.exercism, title: "Exercism — Rust Track", url: "https://exercism.org/tracks/rust", guidance: "Small mentored exercises once rustlings is done." },
+      ],
+      extra: [
+        { ...R.rustBook, guidance: "The canonical deep reference — read the ownership and traits chapters after the course." },
       ],
     },
     masteryChecks: [
@@ -147,10 +152,15 @@ export const optionalTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejNet, note: "Your networking foundation transfers; 'A Tour of Go' (go.dev/tour) is the canonical free intro." },
+        { ...R.goTour, guidance: "Complete the full tour in the browser (~4 h), running and modifying every example — then port the lab." },
       ],
-      alternatives: [
-        { ...R.dockerStart, note: "Go and container infrastructure go hand in hand." },
+      alternatives: [],
+      practice: [
+        { ...R.exercism, title: "Exercism — Go Track", url: "https://exercism.org/tracks/go", guidance: "The Go track's early exercises cement the syntax fast." },
+      ],
+      extra: [
+        { ...R.goByExample, guidance: "Annotated runnable examples for everything the Tour showed." },
+        { ...R.dockerStart, guidance: "Go and container infrastructure go hand in hand." },
       ],
     },
     masteryChecks: [
@@ -221,10 +231,13 @@ export const optionalTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.tsHandbook, note: "Your typed-OOP foundation transfers; each ecosystem's official docs (Oracle Java, Microsoft Learn) are the canonical guides." },
+        { ...R.moocFiJava, guidance: "Choosing Java: do Parts 1–7 of 'Java Programming I' — exercise-driven with automatic grading." },
+        { ...R.csharpPath, guidance: "Choosing C#: complete this Microsoft Learn path with its in-browser exercises. Pick one language, not both." },
       ],
-      alternatives: [
-        { ...R.reactLearn, note: "Your architecture and component knowledge applies directly to enterprise frameworks." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.tsHandbook, guidance: "Your typed-OOP foundation transfers; type-thinking carries straight into Java and C#." },
       ],
     },
     masteryChecks: [
@@ -297,10 +310,15 @@ export const optionalTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.cppref, note: "cppreference covers C++ too; learncpp.com is an excellent free structured course." },
+        { ...R.learncpp, guidance: "Chapters 1–13 (basics through classes), skimming what C already taught you; do the quizzes — they catch C habits." },
       ],
-      alternatives: [
-        { ...R.godbolt, note: "Invaluable for seeing what C++ abstractions compile to." },
+      alternatives: [],
+      practice: [
+        { ...R.exercism, title: "Exercism — C++ Track", url: "https://exercism.org/tracks/cpp", guidance: "Mentor feedback here catches C-isms in your C++." },
+        { ...R.godbolt, guidance: "Invaluable for seeing what C++ abstractions compile to — often nothing." },
+      ],
+      extra: [
+        { ...R.cppref, guidance: "cppreference covers C++ too — the standard-library reference to keep open." },
       ],
     },
     masteryChecks: [
@@ -374,10 +392,15 @@ export const optionalTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.mitMath, note: "For the vector/linear-algebra math games use; Godot's official docs (docs.godotengine.org) are the canonical engine guide." },
+        { ...R.godotFirst2D, guidance: "Build the whole tutorial game first; only then start your own — the discipline pays off." },
       ],
       alternatives: [
-        { ...R.visualgo, note: "For the algorithms and state machines that power game logic." },
+        { ...R.learnGdscript, guidance: "An interactive in-browser app teaching GDScript from zero, if the scripting side feels shaky." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.mitMath, guidance: "For the vector math that game movement and collision use." },
+        { ...R.visualgo, guidance: "For the algorithms and state machines that power game logic." },
       ],
     },
     masteryChecks: [
@@ -450,11 +473,16 @@ export const optionalTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.nand2tetris, note: "Its back half builds a compiler and VM — the canonical from-scratch language project; 'Crafting Interpreters' (craftinginterpreters.com) is the definitive free book." },
+        { ...R.fastaiCourse, guidance: "If machine learning calls you: do lessons 1–2 and train your first real model this week." },
       ],
       alternatives: [
-        { ...R.mitMath, note: "The mathematical foundation for ML and distributed-systems theory." },
-        { ...R.ostep, note: "For the systems grounding embedded and distributed work build on." },
+        { ...R.mit6824, guidance: "If distributed systems call you: watch lectures 1–3 and attempt the first lab." },
+        { ...R.craftingInterpreters, guidance: "If languages call you: build the tree-walking interpreter in part II, chapter by chapter." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.nand2tetris, guidance: "Its back half builds a compiler and VM — the canonical from-scratch language project." },
+        { ...R.ostep, guidance: "For the systems grounding embedded and distributed work build on." },
       ],
     },
     masteryChecks: [

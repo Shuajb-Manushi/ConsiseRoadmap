@@ -66,11 +66,17 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "The 'Multifile Projects' chapter covers exactly this workflow." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/2/", guidance: "Watch the first ~45 min of the Week 2 lecture — the four compilation stages (preprocess, compile, assemble, link) demonstrated live. Stop when it moves on to arrays, or keep watching as a refresher." },
       ],
       alternatives: [
-        { ...R.gnuC, note: "The preprocessor and linkage sections give the precise rules if Beej feels too casual." },
-        { ...R.godbolt, note: "Inspect what a translation unit exports — switch output to 'compile to binary' and view symbols." },
+        { ...R.cpuLand, guidance: "The chapters on ELF and exec explain what the linker's output actually is." },
+      ],
+      practice: [
+        { ...R.godbolt, guidance: "Inspect what a translation unit exports — switch output to 'compile to binary' and view symbols." },
+      ],
+      extra: [
+        { ...R.beejC, guidance: "The 'Multifile Projects' chapter covers exactly this workflow." },
+        { ...R.cppref, guidance: "The preprocessor and linkage pages give the precise rules when you need them." },
       ],
     },
     masteryChecks: [
@@ -144,11 +150,17 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "Chapters on types and bitwise operations; read the integer conversion rules twice." },
+        { ...R.benEaterTwos, guidance: "Watch it fully, then predict the bit patterns of -1, -128, and 255 as int8 before checking yourself." },
       ],
       alternatives: [
-        { ...R.cppref, note: "The 'implicit conversions' and 'operator precedence' pages are the exact rules when in doubt." },
         { ...R.nand2tetris, note: "Weeks 1–2 build binary arithmetic from gates — the deepest possible grounding." },
+      ],
+      practice: [
+        { ...R.godbolt, guidance: "Compile if (x + 1 < x) at -O2 and watch the compiler delete it — undefined behavior made visible." },
+      ],
+      extra: [
+        { ...R.beejC, guidance: "Chapters on types and bitwise operations; read the integer conversion rules twice." },
+        { ...R.cppref, guidance: "The 'implicit conversions' and 'operator precedence' pages are the exact rules when in doubt." },
       ],
     },
     masteryChecks: [
@@ -227,11 +239,18 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "The pointers and strings chapters — read with a compiler open, not on the couch." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/4/", guidance: "Watch the Week 4 'Memory' lecture (~2 h) in full — pointers, strings, and memory drawn out on stage. This is the single best pointer lecture available; then do the lab." },
       ],
       alternatives: [
-        { ...R.cppref, note: "The pointer and array pages state the decay rules with precision when Beej's prose isn't enough." },
-        { ...R.godbolt, note: "Watch a[i] and *(a+i) compile to identical assembly — decay made visible." },
+        { ...R.mycodeschoolPointers, guidance: "Lessons 1–10 cover pointers, arrays, and strings at a slower, whiteboard-drawing pace." },
+      ],
+      practice: [
+        { ...R.pythonTutor, guidance: "Switch the language to C and step through small pointer programs — watch the arrows move as p++ runs." },
+        { ...R.godbolt, guidance: "Watch a[i] and *(a+i) compile to identical assembly — decay made visible." },
+      ],
+      extra: [
+        { ...R.beejC, guidance: "The pointers and strings chapters — read with a compiler open, not on the couch." },
+        { ...R.cppref, guidance: "The pointer and array pages state the decay rules with precision." },
       ],
     },
     masteryChecks: [
@@ -314,11 +333,16 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "The 'Manual Memory Allocation' chapter — the realloc section especially." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/4/", guidance: "Rewatch the second half of the Week 4 'Memory' lecture: malloc, free, valgrind, and the classic heap bugs demonstrated live." },
       ],
       alternatives: [
-        { ...R.ostep, note: "Chapter 14 (Memory API) and 17 (Free-Space Management) show the allocator's side of the contract." },
-        { ...R.cppref, note: "The malloc/realloc/free pages are the precise contracts; note what realloc does on failure." },
+        { ...R.mycodeschoolPointers, guidance: "The dynamic-memory lessons (malloc/calloc/realloc/free) if you want the same ground at a slower pace." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.beejC, guidance: "The 'Manual Memory Allocation' chapter — the realloc section especially." },
+        { ...R.ostep, guidance: "Chapter 14 (Memory API) and 17 (Free-Space Management) show the allocator's side of the contract." },
+        { ...R.cppref, guidance: "The malloc/realloc/free pages are the precise contracts; note what realloc does on failure." },
       ],
     },
     masteryChecks: [
@@ -398,11 +422,15 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "Structs, unions, and the function-pointers chapter — the typedef trick is in there." },
+        { ...R.mycodeschoolPointers, guidance: "Watch the final lessons of the playlist — 'Function Pointers' and 'Function Pointers and Callbacks' — with a compiler open. They make qsort's design click." },
       ],
-      alternatives: [
-        { ...R.cppref, note: "qsort's page shows the exact comparator contract with examples." },
-        { ...R.godbolt, note: "See that calling through a function pointer is one indirect call instruction — no magic." },
+      alternatives: [],
+      practice: [
+        { ...R.godbolt, guidance: "See that calling through a function pointer is one indirect call instruction — no magic." },
+      ],
+      extra: [
+        { ...R.beejC, guidance: "Structs, unions, and the function-pointers chapter — the typedef trick is in there." },
+        { ...R.cppref, guidance: "qsort's page shows the exact comparator contract with examples." },
       ],
     },
     masteryChecks: [
@@ -481,10 +509,14 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "The multifile-projects chapter, plus Make coverage." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/metaprogramming/", guidance: "Watch the build-systems half of the Metaprogramming lecture (~30 min) and do exercise 1 — writing a Makefile from scratch." },
       ],
       alternatives: [
-        { ...R.missingSemester, note: "The build-systems portion of 'metaprogramming' explains Make's model crisply." },
+        { ...R.makefileTutorial, guidance: "Work through 'Getting Started' and 'Targets' — run every example; it's built for exactly that." },
+      ],
+      practice: [],
+      extra: [
+        { ...R.beejC, guidance: "The multifile-projects chapter, plus Make coverage." },
       ],
     },
     masteryChecks: [
@@ -562,11 +594,14 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.beejC, note: "The File I/O chapters, including binary I/O." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/4/", guidance: "Watch the file-I/O portion of the Week 4 lecture (the final third): fopen, fread, and parsing real file formats — exactly this lab's territory." },
       ],
-      alternatives: [
-        { ...R.cppref, note: "fread/fseek/errno pages — the exact failure semantics live here." },
-        { ...R.ostep, note: "The persistence chapters explain what the OS does beneath your fwrite." },
+      alternatives: [],
+      practice: [],
+      extra: [
+        { ...R.beejC, guidance: "The File I/O chapters, including binary I/O." },
+        { ...R.cppref, guidance: "fread/fseek/errno pages — the exact failure semantics live here." },
+        { ...R.ostep, guidance: "The persistence chapters explain what the OS does beneath your fwrite." },
       ],
     },
     masteryChecks: [
@@ -647,11 +682,16 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.gdbDocs, note: "Keep the command reference open; learn 10 commands well rather than 100 vaguely." },
+        { ...R.missingSemester, url: "https://missing.csail.mit.edu/2020/debugging-profiling/", guidance: "Watch the debuggers segment (GDB demoed live) and do the debugging exercises; you met the logging half back in Reading Errors." },
       ],
       alternatives: [
-        { ...R.missingSemester, note: "The debugging lecture demos GDB and sanitizers live." },
-        { ...R.godbolt, note: "Seeing the instrumented assembly ASan emits demystifies how it catches accesses." },
+        { ...R.beejGdb, guidance: "A 30-minute read that gets GDB working under your fingers — do it at a terminal, not on the couch." },
+      ],
+      practice: [
+        { ...R.godbolt, guidance: "Seeing the instrumented assembly ASan emits demystifies how it catches accesses." },
+      ],
+      extra: [
+        { ...R.gdbDocs, guidance: "Keep the command reference open; learn 10 commands well rather than 100 vaguely." },
       ],
     },
     masteryChecks: [
@@ -731,11 +771,17 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.visualgo, note: "The linked-list visualizations — watch operations animate before writing them." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/5/", guidance: "Watch the Week 5 'Data Structures' lecture (~2 h): linked lists built pointer by pointer on stage, with the classic orphaned-node mistakes shown live." },
       ],
       alternatives: [
-        { ...R.opendsa, note: "The lists/stacks/queues chapters with interactive exercises." },
-        { ...R.beejC, note: "For the C mechanics of nodes and pointers-to-pointers." },
+        { ...R.fisetDS, guidance: "Use the chapter markers: the 'Linked List', 'Stack', and 'Queue' chapters (~90 min total) for a diagram-first treatment." },
+      ],
+      practice: [
+        { ...R.visualgo, guidance: "Open the Linked List visualization — watch insert and remove animate before writing them, then quiz yourself in Training mode." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "The lists/stacks/queues chapters with interactive exercises." },
+        { ...R.beejC, guidance: "For the C mechanics of nodes and pointers-to-pointers." },
       ],
     },
     masteryChecks: [
@@ -813,11 +859,16 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.visualgo, note: "The hash-table visualization — watch chaining and probing collide and resolve." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/5/", guidance: "Rewatch the hash-table segment of the Week 5 lecture — chaining demonstrated with actual buckets and collisions." },
       ],
       alternatives: [
-        { ...R.opendsa, note: "The hashing chapters, with exercises on probe sequences and load factor." },
-        { ...R.ostep, note: "Not about hashing, but the 'measure it' benchmark mindset here is pure OSTEP homework style." },
+        { ...R.fisetDS, guidance: "The 'Hash Table' chapters: separate chaining and open addressing with diagrams (~1 h)." },
+      ],
+      practice: [
+        { ...R.visualgo, guidance: "Open the Hash Table visualization — watch chaining and probing collide and resolve, then try Training mode." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "The hashing chapters, with exercises on probe sequences and load factor." },
       ],
     },
     masteryChecks: [
@@ -898,11 +949,17 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.visualgo, note: "BST visualization — especially watch the deletion cases animate." },
+        { ...R.cs50x, url: "https://cs50.harvard.edu/x/2025/weeks/5/", guidance: "Watch the trees and tries segment of the Week 5 lecture — why hierarchy needs pointers, and what ordering buys you." },
       ],
       alternatives: [
-        { ...R.opendsa, note: "The trees chapters, with proofs and exercises for traversal orders." },
-        { ...R.ostep, note: "The filesystem chapters show your lab's structure living inside the OS for real." },
+        { ...R.fisetDS, guidance: "The 'Binary Search Tree' chapters, including all three deletion cases (~1 h)." },
+      ],
+      practice: [
+        { ...R.visualgo, guidance: "BST page: run insert, search, and all three deletion cases in step mode before coding them." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "The trees chapters, with proofs and exercises for traversal orders." },
+        { ...R.ostep, guidance: "The filesystem chapters show your lab's structure living inside the OS for real." },
       ],
     },
     masteryChecks: [
@@ -982,11 +1039,16 @@ export const cTopics: TopicDraft[] = [
     },
     resources: {
       primary: [
-        { ...R.visualgo, note: "Graph traversal visualizations — run BFS and DFS side by side on the same graph." },
+        { ...R.fisetGraphs, guidance: "Watch 'Graph Theory Introduction', the BFS and DFS chapters, and 'Topological Sort' (~2 h total). Skip shortest paths for now — the CS branch returns for them." },
       ],
       alternatives: [
-        { ...R.opendsa, note: "Graph chapters with formal treatment of traversal properties." },
         { ...R.mitMath, note: "The graph-theory lectures if you want the mathematical grounding early." },
+      ],
+      practice: [
+        { ...R.visualgo, guidance: "Graph Traversal page: run BFS and DFS side by side on the same graph and predict each step." },
+      ],
+      extra: [
+        { ...R.opendsa, guidance: "Graph chapters with formal treatment of traversal properties." },
       ],
     },
     masteryChecks: [

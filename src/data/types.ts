@@ -24,22 +24,41 @@ export type ResourceType =
   | "course"
   | "book"
   | "video"
+  | "interactive"
   | "lab"
+  | "article"
   | "reference";
 
+/** Resource types allowed as a topic's primary learning resource. */
+export const guidedTypes: ResourceType[] = ["video", "course", "interactive", "lab"];
+
 export type Resource = {
+  /** Catalog key; lets deep-linked variants aggregate back to one entry. */
+  id?: string;
   title: string;
   url: string;
   type: ResourceType;
-  /** What this resource is best used for. */
+  /** What this resource is / teaches. */
   note: string;
+  /** Who publishes or teaches it. */
+  provider?: string;
+  /** Approximate time commitment, only when reliably known. */
+  duration?: string;
+  /** Exact action for the learner: which lecture, section, or exercises. */
+  guidance?: string;
+  /** Who this resource suits best (shown in the Resource Library). */
+  audience?: string;
 };
 
 export type ResourceGroup = {
-  /** The recommended way to learn this topic. */
+  /** One best starting resource: a guided video, course, tutorial, or lab. */
   primary: Resource[];
-  /** Shown behind "Don't like this explanation?". */
+  /** Optional different-style explanations, shown behind "Try another explanation". */
   alternatives: Resource[];
+  /** Interactive labs, visualizations, and exercise platforms. */
+  practice: Resource[];
+  /** Docs, books, manuals, and references — collapsed by default. */
+  extra: Resource[];
 };
 
 export type PracticalLab = {

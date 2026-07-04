@@ -2,6 +2,9 @@ import { describe, it, expect } from "vitest";
 import { topics, topicById } from "./topics";
 import { branches, branchById } from "./branches";
 import { milestones } from "./milestones";
+import { R, resourcePurposes } from "./resourceCatalog";
+import { guidedTypes } from "./types";
+import type { Resource } from "./types";
 /**
  * These tests are the curriculum's integrity net. Failures are written to be
  * readable so a future contributor editing data can repair it without reading
@@ -145,23 +148,122 @@ describe("required fields are populated", () => {
 });
 
 describe("resources", () => {
-  it("required topics have at least one primary resource", () => {
+  const allOf = (t: (typeof topics)[number]): Resource[] => [
+    ...t.resources.primary,
+    ...t.resources.alternatives,
+    ...t.resources.practice,
+    ...t.resources.extra,
+  ];
+
+  /**
+   * Topics whose primary resource is deliberately not a video/course/
+   * interactive/lab. Each exception must be justified here:
+   * - db-fastapi: the FastAPI tutorial is typed "documentation" but is a
+   *   genuinely sequenced, run-every-snippet guided tutorial — the best free
+   *   starting point for the framework.
+   * - se-requirements: no free video/course teaches requirements-writing well;
+   *   Atlassian's user-stories article is short, guided, and the honest best pick.
+   */
+  const primaryTypeExceptions = new Set(["db-fastapi", "se-requirements"]);
+
+  it("every topic has at least one primary learning resource", () => {
     const problems = topics
-      .filter((t) => t.required && t.resources.primary.length === 0)
+      .filter((t) => t.resources.primary.length === 0)
       .map((t) => t.id);
-    expect(problems, `required topics missing a primary resource: ${problems.join(", ")}`).toEqual([]);
+    expect(problems, `topics missing a primary resource: ${problems.join(", ")}`).toEqual([]);
   });
 
-  it("every resource has a title, url, and note", () => {
+  it("primary resources are guided (video/course/interactive/lab) unless excepted", () => {
     const problems: string[] = [];
     for (const t of topics) {
-      for (const r of [...t.resources.primary, ...t.resources.alternatives]) {
+      if (primaryTypeExceptions.has(t.id)) continue;
+      for (const r of t.resources.primary) {
+        if (!guidedTypes.includes(r.type)) {
+          problems.push(`${t.id}: primary "${r.title}" is type "${r.type}" — books/docs/references belong in extra (or add a documented exception)`);
+        }
+      }
+    }
+    expect(problems, problems.join("\n")).toEqual([]);
+  });
+
+  it("primary resources carry exact guidance, not vague notes", () => {
+    const problems = topics
+      .flatMap((t) => t.resources.primary.map((r) => ({ t, r })))
+      .filter(({ r }) => !(r.guidance ?? r.note)?.trim() || (r.guidance ?? r.note).trim().length < 30)
+      .map(({ t, r }) => `${t.id}: "${r.title}" needs specific guidance (what to watch/do)`);
+    expect(problems, problems.join("\n")).toEqual([]);
+  });
+
+  it("every topic has a practice resource or a complete practical lab", () => {
+    // The built-in lab is an acceptable practical component; this guards
+    // against a topic ever having neither.
+    const problems = topics
+      .filter((t) => t.resources.practice.length === 0 && !t.lab)
+      .map((t) => t.id);
+    expect(problems, problems.join("\n")).toEqual([]);
+  });
+
+  it("every resource has a title, valid https url, and note", () => {
+    const problems: string[] = [];
+    for (const t of topics) {
+      for (const r of allOf(t)) {
         if (!r.title?.trim()) problems.push(`${t.id}: resource with empty title`);
-        if (!/^https?:\/\//.test(r.url)) problems.push(`${t.id}: resource "${r.title}" has a non-http url`);
+        if (!/^https:\/\//.test(r.url)) problems.push(`${t.id}: resource "${r.title}" has a non-https url`);
+        try {
+          new URL(r.url);
+        } catch {
+          problems.push(`${t.id}: resource "${r.title}" has a syntactically invalid url: ${r.url}`);
+        }
         if (!r.note?.trim()) problems.push(`${t.id}: resource "${r.title}" has no note`);
       }
     }
     expect(problems, problems.join("\n")).toEqual([]);
+  });
+
+  it("topic resources reference catalog entries (id matches a catalog key)", () => {
+    const problems: string[] = [];
+    for (const t of topics) {
+      for (const r of allOf(t)) {
+        if (!r.id || !(r.id in R)) {
+          problems.push(`${t.id}: resource "${r.title}" has no catalog id — add it to resourceCatalog.ts`);
+        }
+      }
+    }
+    expect(problems, problems.join("\n")).toEqual([]);
+  });
+});
+
+describe("resource catalog", () => {
+  it("entry ids match their keys and urls are unique and valid", () => {
+    const problems: string[] = [];
+    const urls = new Map<string, string>();
+    for (const [key, r] of Object.entries(R)) {
+      if (r.id !== key) problems.push(`catalog "${key}" has id "${r.id}" — they must match`);
+      if (!/^https:\/\//.test(r.url)) problems.push(`catalog "${key}" url is not https`);
+      try {
+        new URL(r.url);
+      } catch {
+        problems.push(`catalog "${key}" url is syntactically invalid`);
+      }
+      const prev = urls.get(r.url);
+      if (prev) problems.push(`catalog "${key}" duplicates url of "${prev}"`);
+      urls.set(r.url, key);
+      if (!r.note?.trim()) problems.push(`catalog "${key}" has no note`);
+    }
+    expect(problems, problems.join("\n")).toEqual([]);
+  });
+
+  it("the Resource Library purpose groups cover every catalog entry exactly once", () => {
+    const seen = new Map<string, number>();
+    for (const g of resourcePurposes) {
+      for (const k of g.keys) seen.set(k, (seen.get(k) ?? 0) + 1);
+    }
+    const missing = Object.keys(R).filter((k) => !seen.has(k));
+    const dupes = [...seen.entries()].filter(([, n]) => n > 1).map(([k]) => k);
+    const unknown = [...seen.keys()].filter((k) => !(k in R));
+    expect(missing, `catalog keys missing from purpose groups: ${missing.join(", ")}`).toEqual([]);
+    expect(dupes, `catalog keys in multiple purpose groups: ${dupes.join(", ")}`).toEqual([]);
+    expect(unknown, `purpose groups reference unknown keys: ${unknown.join(", ")}`).toEqual([]);
   });
 });
 

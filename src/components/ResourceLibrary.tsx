@@ -1,26 +1,34 @@
 import { useMemo, useState } from "react";
 import type { Route } from "../lib/useHashRoute";
-import { R, resourceSubjects } from "../data/resourceCatalog";
+import { R, resourcePurposes } from "../data/resourceCatalog";
 import { topics } from "../data/topics";
 import type { CatalogKey } from "../data/resourceCatalog";
+import type { Resource } from "../data/types";
 import "../styles/pages.css";
 
-// Which topics recommend a given catalog resource (matched by URL).
+// Which topics recommend a given catalog resource (matched by catalog id,
+// so deep-linked variants still count toward their canonical entry).
 function buildUsage(): Map<string, { id: string; title: string }[]> {
-  const byUrl = new Map<string, { id: string; title: string }[]>();
+  const byKey = new Map<string, { id: string; title: string }[]>();
   for (const t of topics) {
-    const all = [...t.resources.primary, ...t.resources.alternatives];
+    const all = [
+      ...t.resources.primary,
+      ...t.resources.alternatives,
+      ...t.resources.practice,
+      ...t.resources.extra,
+    ];
     const seen = new Set<string>();
     for (const r of all) {
-      if (seen.has(r.url)) continue;
-      seen.add(r.url);
-      (byUrl.get(r.url) ?? byUrl.set(r.url, []).get(r.url)!).push({ id: t.id, title: t.title });
+      const key = r.id ?? r.url;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      (byKey.get(key) ?? byKey.set(key, []).get(key)!).push({ id: t.id, title: t.title });
     }
   }
-  return byUrl;
+  return byKey;
 }
 
-const TYPES = ["all", "documentation", "course", "book", "video", "lab", "reference"] as const;
+const TYPES = ["all", "course", "video", "interactive", "lab", "book", "documentation", "article", "reference"] as const;
 
 export function ResourceLibrary({ navigate }: { navigate: (r: Route) => void }) {
   const [query, setQuery] = useState("");
@@ -35,8 +43,9 @@ export function ResourceLibrary({ navigate }: { navigate: (r: Route) => void }) 
       <header className="page-head">
         <h1>Resource Library</h1>
         <p className="page-lede">
-          Every resource used across the roadmap, grouped by subject. These are hand-picked and
-          trustworthy — free wherever possible. Each note says what the resource is best for.
+          Every resource used across the roadmap, grouped by how you should use it: guided
+          courses and videos to learn from, interactive tools to practice with, and references
+          to look things up in. All hand-picked, verified, and free unless labelled otherwise.
           Links open in a new tab.
         </p>
       </header>
@@ -63,21 +72,24 @@ export function ResourceLibrary({ navigate }: { navigate: (r: Route) => void }) 
         </div>
       </div>
 
-      {resourceSubjects.map((subject) => {
-        const entries = subject.keys
-          .map((key) => ({ key, r: R[key as CatalogKey] }))
+      {resourcePurposes.map((group) => {
+        const entries = group.keys
+          .map((key) => ({ key, r: R[key as CatalogKey] as Resource }))
           .filter(({ r }) => {
             if (type !== "all" && r.type !== type) return false;
             if (!q) return true;
-            return (r.title + " " + r.note + " " + r.type).toLowerCase().includes(q);
+            return (r.title + " " + r.note + " " + r.type + " " + (r.provider ?? "") + " " + (r.audience ?? ""))
+              .toLowerCase()
+              .includes(q);
           });
         if (entries.length === 0) return null;
         return (
-          <section key={subject.subject} className="reslib-subject">
-            <h2>{subject.subject}</h2>
+          <section key={group.purpose} className="reslib-subject">
+            <h2>{group.purpose}</h2>
+            <p className="reslib-blurb">{group.blurb}</p>
             <div className="reslib-grid">
               {entries.map(({ key, r }) => {
-                const used = usage.get(r.url) ?? [];
+                const used = usage.get(r.id ?? r.url) ?? [];
                 return (
                   <div key={key} className="reslib-card">
                     <div className="reslib-card__top">
@@ -87,7 +99,15 @@ export function ResourceLibrary({ navigate }: { navigate: (r: Route) => void }) 
                       </a>
                     </div>
                     <h3 className="reslib-card__title">{r.title}</h3>
+                    {(r.provider || r.duration) && (
+                      <p className="reslib-card__meta">
+                        {r.provider}
+                        {r.provider && r.duration ? " · " : ""}
+                        {r.duration}
+                      </p>
+                    )}
                     <p className="reslib-card__note">{r.note}</p>
+                    {r.audience && <p className="reslib-card__audience">Best for: {r.audience}</p>}
                     {used.length > 0 && (
                       <details className="reslib-card__used">
                         <summary>Used in {used.length} {used.length === 1 ? "topic" : "topics"}</summary>
