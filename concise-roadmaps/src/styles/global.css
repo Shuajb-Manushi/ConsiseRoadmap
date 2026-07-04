@@ -1,0 +1,228 @@
+/*
+ * ConciseRoadmaps design system.
+ * Editorial, warm off-white canvas, paper-white surfaces, strong black type,
+ * sharp orange offset blocks, thin technical connector lines. No gradients,
+ * no glassmorphism, mostly square geometry.
+ */
+
+:root {
+  /* Canvas & surfaces */
+  --canvas: #f4f0e8;
+  --canvas-deep: #ece6da;
+  --paper: #ffffff;
+  --paper-edge: #e4ddce;
+
+  /* Ink */
+  --ink: #16130d;
+  --ink-soft: #4a4437;
+  --ink-faint: #79715f;
+
+  /* Signature orange */
+  --orange: #d8562a;
+  --orange-deep: #b5401c;
+  --orange-tint: #f7e6dc;
+
+  /* Lines */
+  --line: #cfc6b4;
+  --line-strong: #b7ac95;
+
+  /* Branch accents (restrained) */
+  --b-start: #7d7264;
+  --b-c: #a84632;
+  --b-cs: #5c6fa8;
+  --b-python: #3f7d5c;
+  --b-web: #b98524;
+  --b-backend: #2f6f8f;
+  --b-practice: #7a5f8f;
+  --b-systems: #44526a;
+  --b-mobile: #2e8f7a;
+  --b-security: #8f2f3f;
+  --b-optional: #9a8a4a;
+
+  /* States */
+  --required-ink: var(--ink);
+  --optional-ink: var(--ink-faint);
+
+  /* Inverse / emphasized surfaces (milestone cards, primary actions).
+     These are explicit in BOTH themes so a "dark card with light text" never
+     collapses into "light card with light text" when --ink flips in dark mode. */
+  --inverse-bg: #16130d;
+  --inverse-fg: #ffffff;
+  --inverse-muted: #d9d2c4;
+  --inverse-border: #16130d;
+
+  /* Type */
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  --mono: "SF Mono", "Cascadia Code", "Consolas", "Roboto Mono", monospace;
+
+  /* Spacing scale */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 64px;
+
+  --radius: 3px;
+  --radius-lg: 5px;
+  --shadow-offset: 6px;
+  --maxw: 1160px;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --canvas: #17140f;
+  --canvas-deep: #100e0a;
+  --paper: #201c16;
+  --paper-edge: #322c22;
+  --ink: #f2ece0;
+  --ink-soft: #cfc6b4;
+  --ink-faint: #9c927e;
+  --orange: #e8683c;
+  --orange-deep: #cf5227;
+  --orange-tint: #3a271d;
+  --line: #3a3225;
+  --line-strong: #4c4232;
+  /* In dark mode an emphasized card is an elevated warm-dark surface (lighter
+     than the canvas so it stands out) with light text and an orange edge. */
+  --inverse-bg: #2c2118;
+  --inverse-fg: #f7f2e8;
+  --inverse-muted: #c6baa4;
+  --inverse-border: var(--orange);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0 0 var(--s4) 0;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); }
+h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+h3 { font-size: clamp(1.2rem, 2.4vw, 1.45rem); }
+h4 { font-size: 1.05rem; }
+
+p { margin: 0 0 var(--s4) 0; }
+
+a {
+  color: var(--orange-deep);
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+a:hover { color: var(--orange); }
+
+code, kbd {
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+kbd {
+  background: var(--canvas-deep);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1px 6px;
+  font-size: 0.78em;
+  color: var(--ink-soft);
+}
+
+button {
+  font-family: var(--sans);
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--orange);
+  outline-offset: 2px;
+}
+
+ul, ol { margin: 0 0 var(--s4) 0; padding-left: var(--s5); }
+li { margin-bottom: var(--s2); }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: var(--s6) 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--s4);
+  top: -60px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--s2) var(--s4);
+  border-radius: var(--radius);
+  z-index: 1000;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: var(--s4); }
+
+/* The signature offset-block wrapper: an orange block sits behind an element. */
+.offset {
+  position: relative;
+  display: inline-block;
+}
+.offset::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translate(var(--shadow-offset), var(--shadow-offset));
+  background: var(--orange);
+  z-index: 0;
+}
+.offset > * { position: relative; z-index: 1; }
+
+/* Container */
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--s5);
+}
+
+@media (max-width: 640px) {
+  .container { padding: 0 var(--s4); }
+  body { font-size: 15px; }
+}
+
+/* Utility surfaces */
+.paper {
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+}
