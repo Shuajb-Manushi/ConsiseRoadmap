@@ -1,16 +1,36 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useHashRoute } from "./lib/useHashRoute";
 import { useTheme } from "./lib/hooks";
 import { Header } from "./components/Header";
-import { SearchModal } from "./components/SearchModal";
 import { RoadmapView } from "./components/RoadmapView";
-import { TopicDetail } from "./components/TopicDetail";
-import { MilestoneDetail } from "./components/MilestoneDetail";
-import { ResourceLibrary } from "./components/ResourceLibrary";
 import { About } from "./components/About";
-import { topicById } from "./data/topics";
-import { milestones } from "./data/milestones";
+import { topicMetaById } from "./data/topics/lite";
+import { milestonesLite } from "./data/milestonesLite";
 import "./styles/app.css";
+
+// The detail routes, resource library, and search import the full curriculum
+// (all topic bodies + the resource catalog). Loading them lazily keeps that
+// prose out of the initial bundle; they share one curriculum chunk.
+const TopicDetail = lazy(() =>
+  import("./components/TopicDetail").then((m) => ({ default: m.TopicDetail }))
+);
+const MilestoneDetail = lazy(() =>
+  import("./components/MilestoneDetail").then((m) => ({ default: m.MilestoneDetail }))
+);
+const ResourceLibrary = lazy(() =>
+  import("./components/ResourceLibrary").then((m) => ({ default: m.ResourceLibrary }))
+);
+const SearchModal = lazy(() =>
+  import("./components/SearchModal").then((m) => ({ default: m.SearchModal }))
+);
+
+function RouteFallback() {
+  return (
+    <div className="container detail-page" aria-busy="true">
+      <p>Loading…</p>
+    </div>
+  );
+}
 
 export function App() {
   const { route, navigate } = useHashRoute();
@@ -31,10 +51,14 @@ export function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Move focus to the main heading on route change (SPA accessibility).
+  // Deterministic SPA focus: on EVERY route change (including returning to
+  // the roadmap, forward/back, and invalid ids) move focus to <main> and
+  // reset scroll. Skipped on initial mount so page load doesn't steal focus.
+  const prevRouteRef = useRef(route);
   useEffect(() => {
-    if (route.name === "roadmap") return; // roadmap manages its own focus
-    mainRef.current?.focus();
+    if (prevRouteRef.current === route) return; // initial mount
+    prevRouteRef.current = route;
+    mainRef.current?.focus({ preventScroll: true });
     mainRef.current?.scrollTo?.(0, 0);
     window.scrollTo(0, 0);
   }, [route]);
@@ -53,11 +77,13 @@ export function App() {
       />
 
       <main id="main" ref={mainRef} tabIndex={-1} className="app-main">
-        {route.name === "roadmap" && <RoadmapView navigate={navigate} />}
-        {route.name === "topic" && <TopicRoute id={route.id} navigate={navigate} />}
-        {route.name === "milestone" && <MilestoneRoute id={route.id} navigate={navigate} />}
-        {route.name === "resources" && <ResourceLibrary navigate={navigate} />}
-        {route.name === "about" && <About navigate={navigate} />}
+        <Suspense fallback={<RouteFallback />}>
+          {route.name === "roadmap" && <RoadmapView navigate={navigate} />}
+          {route.name === "topic" && <TopicRoute id={route.id} navigate={navigate} />}
+          {route.name === "milestone" && <MilestoneRoute id={route.id} navigate={navigate} />}
+          {route.name === "resources" && <ResourceLibrary navigate={navigate} />}
+          {route.name === "about" && <About navigate={navigate} />}
+        </Suspense>
       </main>
 
       <footer className="app-footer">
@@ -68,27 +94,30 @@ export function App() {
             by using it. Everything is unlocked.
           </p>
           <p className="app-footer__meta">
-            No accounts, no tracking, no backend. Built with React, TypeScript,
-            and @xyflow/react.
+            No accounts, no tracking, no backend. Built with React and TypeScript.
           </p>
         </div>
       </footer>
 
-      {searchOpen && <SearchModal onClose={closeSearch} navigate={navigate} />}
+      {searchOpen && (
+        <Suspense fallback={null}>
+          <SearchModal onClose={closeSearch} navigate={navigate} />
+        </Suspense>
+      )}
     </div>
   );
 }
 
 function TopicRoute({ id, navigate }: { id: string; navigate: ReturnType<typeof useHashRoute>["navigate"] }) {
-  const topic = topicById.get(id);
-  if (!topic) return <NotFound what={`topic "${id}"`} navigate={navigate} />;
-  return <TopicDetail topic={topic} navigate={navigate} />;
+  if (!topicMetaById.has(id)) return <NotFound what={`topic "${id}"`} navigate={navigate} />;
+  return <TopicDetail id={id} navigate={navigate} />;
 }
 
 function MilestoneRoute({ id, navigate }: { id: string; navigate: ReturnType<typeof useHashRoute>["navigate"] }) {
-  const milestone = milestones.find((m) => m.id === id);
-  if (!milestone) return <NotFound what={`milestone "${id}"`} navigate={navigate} />;
-  return <MilestoneDetail milestone={milestone} navigate={navigate} />;
+  if (!milestonesLite.some((m) => m.id === id)) {
+    return <NotFound what={`milestone "${id}"`} navigate={navigate} />;
+  }
+  return <MilestoneDetail id={id} navigate={navigate} />;
 }
 
 function NotFound({ what, navigate }: { what: string; navigate: ReturnType<typeof useHashRoute>["navigate"] }) {

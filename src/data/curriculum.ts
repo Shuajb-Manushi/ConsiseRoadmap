@@ -1,10 +1,15 @@
 import type { Difficulty } from "./types";
 import { branches, branchById } from "./branches";
-import { topics, topicById, topicsByBranch } from "./topics";
-import { milestones } from "./milestones";
-import { R, resourcePurposes } from "./resourceCatalog";
+import { topicCount, totalRequiredHours } from "./topics/lite";
+import { milestoneCount } from "./milestonesLite";
 
-export { branches, branchById, topics, topicById, topicsByBranch, milestones, R, resourcePurposes };
+/**
+ * The EAGER public aggregator: branch metadata, the start point, labels, and
+ * derived totals. Deliberately free of curriculum prose — the heavy topic and
+ * milestone bodies live behind ./topics/index.ts and ./milestones.ts, which
+ * only lazily-loaded routes and tests import.
+ */
+export { branches, branchById, topicCount, totalRequiredHours, milestoneCount };
 
 /** The learner's customized starting point. */
 export const startHere = {
@@ -25,11 +30,3 @@ export const difficultyLabel: Record<Difficulty, string> = {
   intermediate: "Intermediate",
   advanced: "Advanced",
 };
-
-/** Total estimated hours across required topics — shown in the About page. */
-export const totalRequiredHours = topics
-  .filter((t) => t.required)
-  .reduce((sum, t) => sum + t.estimatedHours, 0);
-
-export const topicCount = topics.length;
-export const milestoneCount = milestones.length;

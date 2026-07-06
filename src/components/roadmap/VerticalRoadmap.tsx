@@ -1,7 +1,7 @@
 import type { Route } from "../../lib/useHashRoute";
 import { branches } from "../../data/branches";
-import { topicsByBranch, topicById } from "../../data/topics";
-import { milestones } from "../../data/milestones";
+import { topicsLiteByBranch, topicMetaById } from "../../data/topics/lite";
+import { milestonesLite } from "../../data/milestonesLite";
 
 /**
  * The mobile-first vertical roadmap. Branches become sections; topics are an
@@ -13,7 +13,7 @@ export function VerticalRoadmap({ navigate }: { navigate: (r: Route) => void }) 
   return (
     <div className="vroadmap">
       {branches.map((branch) => {
-        const list = (topicsByBranch[branch.id] ?? []).slice().sort((a, b) => a.stage - b.stage);
+        const list = (topicsLiteByBranch[branch.id] ?? []).slice().sort((a, b) => a.stage - b.stage);
         if (list.length === 0) return null;
         return (
           <section
@@ -34,7 +34,7 @@ export function VerticalRoadmap({ navigate }: { navigate: (r: Route) => void }) 
             <ol className="vbranch__list">
               {list.map((t) => {
                 const prereqs = t.prerequisiteIds
-                  .map((id) => topicById.get(id))
+                  .map((id) => topicMetaById.get(id))
                   .filter((x): x is NonNullable<typeof x> => !!x);
                 const stateClass = branch.optional ? "later" : t.required ? "required" : "optional";
                 return (
@@ -78,7 +78,7 @@ export function VerticalRoadmap({ navigate }: { navigate: (r: Route) => void }) 
           </p>
         </div>
         <ol className="vbranch__list">
-          {milestones.map((m) => (
+          {milestonesLite.map((m) => (
             <li key={m.id} className="vtopic">
               <button
                 className="vtopic__btn vtopic__btn--milestone"
@@ -90,7 +90,7 @@ export function VerticalRoadmap({ navigate }: { navigate: (r: Route) => void }) 
                   <span className="vtopic__summary">{m.brief}</span>
                   <span className="vtopic__prereq">
                     Unlocked by: {m.unlockedBy
-                      .map((id) => topicById.get(id)?.title ?? id)
+                      .map((id) => topicMetaById.get(id)?.title ?? id)
                       .join(", ")}
                   </span>
                 </span>

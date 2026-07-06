@@ -85,7 +85,7 @@
   left: 4px;
   width: calc(50% - 4px);
   bottom: 4px;
-  background: var(--orange);
+  background: var(--accent-bg);
   border-radius: 999px;
   transition: transform 180ms ease;
   z-index: 0;
@@ -103,7 +103,7 @@
   transition: color 160ms ease;
   white-space: nowrap;
 }
-.viewswitch__tab.is-active { color: #fff; }
+.viewswitch__tab.is-active { color: var(--on-accent); }
 .viewswitch__tab:focus-visible { outline: 2.5px solid var(--ink); outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -167,7 +167,7 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.guided__expand-all:hover { color: var(--orange); }
+.guided__expand-all:hover { color: var(--orange-deep); }
 
 /* Dominant start node */
 .guided-start {
@@ -176,8 +176,8 @@
   gap: 6px;
   width: 100%;
   text-align: left;
-  background: var(--orange);
-  color: #fff;
+  background: var(--accent-bg);
+  color: var(--on-accent);
   border: none;
   border-radius: var(--radius-lg);
   padding: var(--s5) var(--s6);
@@ -273,20 +273,28 @@
 .phase__topics { list-style: none; margin: 0 0 var(--s3); padding: 0; display: flex; flex-direction: column; gap: var(--s3); }
 
 .gtopic { margin: 0; }
+/* The card is a non-interactive wrapper carrying the chrome; the topic button
+   and the "Also requires" prerequisite links are SIBLINGS inside it, never
+   nested inside each other. */
+.gtopic__card {
+  background: var(--canvas);
+  border: 1.5px solid var(--paper-edge);
+  border-left: 4px solid var(--node-accent, var(--line-strong));
+  border-radius: var(--radius);
+  transition: border-color 0.12s ease, transform 0.08s ease, background 0.12s ease;
+}
+.gtopic__card:hover { transform: translateX(2px); background: var(--paper); border-color: var(--node-accent, var(--ink-soft)); }
+.gtopic__card--optional { border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; }
 .gtopic__btn {
   display: flex;
   gap: var(--s4);
   width: 100%;
   text-align: left;
-  background: var(--canvas);
-  border: 1.5px solid var(--paper-edge);
-  border-left: 4px solid var(--node-accent, var(--line-strong));
+  background: none;
+  border: none;
   border-radius: var(--radius);
   padding: var(--s3) var(--s4);
-  transition: border-color 0.12s ease, transform 0.08s ease, background 0.12s ease;
 }
-.gtopic__btn:hover { transform: translateX(2px); background: var(--paper); border-color: var(--node-accent, var(--ink-soft)); }
-.gtopic__btn--optional { border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; }
 .gtopic__index {
   flex: none;
   font-family: var(--mono);
@@ -300,9 +308,14 @@
 .gtopic__title { font-family: var(--serif); font-size: 1.06rem; font-weight: 600; color: var(--ink); line-height: 1.2; }
 .gtopic__summary { font-size: 0.85rem; color: var(--ink-soft); line-height: 1.45; }
 .gtopic__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
-.gtopic__also { font-size: 0.78rem; color: var(--ink-faint); }
+.gtopic__also {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  margin: 0;
+  padding: 0 var(--s4) var(--s3) calc(20px + var(--s4) + var(--s4));
+}
 .gtopic__also-link { color: var(--orange-deep); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
-.gtopic__also-link:hover { color: var(--orange); }
+.gtopic__also-link:hover { color: var(--ink); }
 .gtopic__also-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
 
 /* Guided milestone card (inverse surface — readable in both themes) */

@@ -7,14 +7,13 @@ import react from "@vitejs/plugin-react";
 // means no server-side rewrites are needed.
 export default defineConfig({
   base: "./",
-  // Cast avoids a spurious type clash from vitest bundling its own copy of vite;
-  // the plugin is identical at runtime.
-  plugins: [react() as never],
+  plugins: [react()],
   build: {
-    // The main chunk is dominated by the static curriculum TEXT (72 topics +
-    // 10 project briefs), which the roadmap page needs in full for both the
-    // guided and browse views and for search. It gzips to ~205 kB. Raise the
-    // advisory limit so the warning reflects real code weight, not prose.
+    // Curriculum prose (topic/milestone bodies + the resource catalog) lives
+    // in a lazily-loaded chunk shared by the detail routes, search, and the
+    // resource library; the eager chunk carries only code and the lightweight
+    // meta index. The raised limit covers the lazy prose chunk, which is
+    // static TEXT, not code weight.
     chunkSizeWarningLimit: 700,
   },
   test: {

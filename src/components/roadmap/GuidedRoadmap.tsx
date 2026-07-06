@@ -2,11 +2,12 @@ import { useState } from "react";
 import type { Route } from "../../lib/useHashRoute";
 import type { GuidedPhase, SideBranch } from "../../data/phases";
 import { guidedPhases, sumHours } from "../../data/phases";
-import { topicById } from "../../data/topics";
-import { branchById, milestones } from "../../data/curriculum";
+import { topicMetaById } from "../../data/topics/lite";
+import { branchById } from "../../data/branches";
+import { milestonesLite } from "../../data/milestonesLite";
 import { startHere } from "../../data/curriculum";
 
-const milestoneById = new Map(milestones.map((m) => [m.id, m]));
+const milestoneById = new Map(milestonesLite.map((m) => [m.id, m]));
 
 export function GuidedRoadmap({ navigate }: { navigate: (r: Route) => void }) {
   // First phase expanded by default.
@@ -144,62 +145,53 @@ function TopicCard({
   index: number;
   navigate: (r: Route) => void;
 }) {
-  const topic = topicById.get(id);
+  const topic = topicMetaById.get(id);
   if (!topic) return null;
   // Cross-branch prerequisites become small "Also requires" links.
   const crossPrereqs = topic.prerequisiteIds
-    .map((p) => topicById.get(p))
+    .map((p) => topicMetaById.get(p))
     .filter((p): p is NonNullable<typeof p> => !!p && p.branch !== topic.branch);
   const stateClass = topic.required ? "required" : "optional";
 
   return (
     <li className="gtopic">
-      <button
-        className={`gtopic__btn gtopic__btn--${stateClass}`}
+      {/* The topic action and prerequisite links are SIBLING controls — an
+          interactive element must never nest inside another. */}
+      <div
+        className={`gtopic__card gtopic__card--${stateClass}`}
         style={{ ["--node-accent" as string]: `var(--b-${topic.branch})` }}
-        onClick={() => navigate({ name: "topic", id })}
       >
-        <span className="gtopic__index" aria-hidden="true">{index}</span>
-        <span className="gtopic__main">
-          <span className="gtopic__title">{topic.title}</span>
-          <span className="gtopic__summary">{topic.summary}</span>
-          <span className="gtopic__tags">
-            <span className={`vtag vtag--${stateClass}`}>
-              {topic.required ? "Required" : "Optional"}
+        <button
+          className="gtopic__btn"
+          onClick={() => navigate({ name: "topic", id })}
+        >
+          <span className="gtopic__index" aria-hidden="true">{index}</span>
+          <span className="gtopic__main">
+            <span className="gtopic__title">{topic.title}</span>
+            <span className="gtopic__summary">{topic.summary}</span>
+            <span className="gtopic__tags">
+              <span className={`vtag vtag--${stateClass}`}>
+                {topic.required ? "Required" : "Optional"}
+              </span>
+              <span className="vtag">{topic.difficulty}</span>
+              <span className="vtag">~{topic.estimatedHours}h</span>
             </span>
-            <span className="vtag">{topic.difficulty}</span>
-            <span className="vtag">~{topic.estimatedHours}h</span>
           </span>
-          {crossPrereqs.length > 0 && (
-            <span className="gtopic__also">
-              Also requires:{" "}
-              {crossPrereqs.map((p, i) => (
-                <span key={p.id}>
-                  {i > 0 && ", "}
-                  <span
-                    className="gtopic__also-link"
-                    role="link"
-                    tabIndex={0}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate({ name: "topic", id: p.id });
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        navigate({ name: "topic", id: p.id });
-                      }
-                    }}
-                  >
-                    {p.title}
-                  </span>
-                </span>
-              ))}
-            </span>
-          )}
-        </span>
-      </button>
+        </button>
+        {crossPrereqs.length > 0 && (
+          <p className="gtopic__also">
+            Also requires:{" "}
+            {crossPrereqs.map((p, i) => (
+              <span key={p.id}>
+                {i > 0 && ", "}
+                <a className="gtopic__also-link" href={`#/topic/${p.id}`}>
+                  {p.title}
+                </a>
+              </span>
+            ))}
+          </p>
+        )}
+      </div>
     </li>
   );
 }

@@ -15,12 +15,20 @@
   /* Ink */
   --ink: #16130d;
   --ink-soft: #4a4437;
-  --ink-faint: #79715f;
+  --ink-faint: #6b634e; /* ≥ 4.5:1 on both --canvas and --paper (WCAG AA) */
 
-  /* Signature orange */
+  /* Signature orange.
+     --orange is DECORATIVE ONLY (borders, rails, focus rings, swatches):
+     it does not reach 4.5:1 against the canvas, so never use it for normal
+     text or as a background under text. For text-sized ink use --orange-deep;
+     for solid accent surfaces use --accent-bg with --on-accent text. */
   --orange: #d8562a;
   --orange-deep: #b5401c;
   --orange-tint: #f7e6dc;
+
+  /* Accent surface + guaranteed-readable text on it (≥ 4.5:1 in both themes) */
+  --accent-bg: #b5401c;
+  --on-accent: #ffffff;
 
   /* Lines */
   --line: #cfc6b4;
@@ -34,6 +42,7 @@
   --b-web: #b98524;
   --b-backend: #2f6f8f;
   --b-practice: #7a5f8f;
+  --b-arch: #a04b73;
   --b-systems: #44526a;
   --b-mobile: #2e8f7a;
   --b-security: #8f2f3f;
@@ -85,8 +94,12 @@
   --ink-soft: #cfc6b4;
   --ink-faint: #9c927e;
   --orange: #e8683c;
-  --orange-deep: #cf5227;
+  --orange-deep: #e0602e; /* used as text: ≥ 4.5:1 on dark --canvas and --paper */
   --orange-tint: #3a271d;
+  /* Dark accent surface keeps the bright orange; text on it flips to a warm
+     near-black instead of chasing a darker orange under white text. */
+  --accent-bg: #e8683c;
+  --on-accent: #201509;
   --line: #3a3225;
   --line-strong: #4c4232;
   /* In dark mode an emphasized card is an elevated warm-dark surface (lighter
@@ -138,7 +151,9 @@ a {
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
 }
-a:hover { color: var(--orange); }
+/* Hover darkens toward ink rather than lightening toward --orange, which
+   does not reach 4.5:1 as text on the light canvas. */
+a:hover { color: var(--ink); }
 
 code, kbd {
   font-family: var(--mono);

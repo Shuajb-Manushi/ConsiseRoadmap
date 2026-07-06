@@ -2,11 +2,15 @@ import { useRef } from "react";
 import type { Topic, Resource } from "../data/types";
 import type { Route } from "../lib/useHashRoute";
 import { topicById } from "../data/topics";
-import { branchById, milestones } from "../data/curriculum";
+import { branchById } from "../data/branches";
+import { milestones } from "../data/milestones";
 import { RequiredChip, DifficultyChip, HoursChip, BranchChip, Disclosure } from "./ui";
 import "../styles/detail.css";
 
-export function TopicDetail({ topic, navigate }: { topic: Topic; navigate: (r: Route) => void }) {
+export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route) => void }) {
+  // The route guard checks existence against the lite index; the joined heavy
+  // index is guaranteed consistent with it (topics/index.ts throws otherwise).
+  const topic = topicById.get(id)!;
   const branch = branchById.get(topic.branch);
   const prereqs = topic.prerequisiteIds.map((id) => topicById.get(id)).filter(Boolean) as Topic[];
   const nexts = topic.nextIds.map((id) => topicById.get(id)).filter(Boolean) as Topic[];

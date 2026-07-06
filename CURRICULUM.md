@@ -42,16 +42,20 @@ Ordered roughly by dependency, though the graph is the real structure:
 5. **Databases & Backend** — relational thinking, SQL, indexing/transactions,
    FastAPI/PostgreSQL, auth, and backend operations.
 6. **Software Engineering Practice** — requirements, collaborative Git, clean code,
-   testing strategy, architecture, CI/Docker/deploy.
-7. **Systems & Networking** — assembly, processes, virtual memory, concurrency, sockets.
-8. **Mobile Development** *(optional)* — React Native after the web foundations.
-9. **Security & Ethical Hacking** — secure mindset first, then Linux, web (OWASP),
-   memory + crypto, and network/reversing/supply-chain — always in authorized labs.
-10. **Optional Specializations** *(later)* — Rust, Go, Java/C#, C++, game dev, and
+   testing strategy, CI/Docker/deploy.
+7. **Software Architecture** — modularity and dependency direction, boundaries and
+   ports/adapters, API contracts and data ownership, choosing a system's shape,
+   reliability, observability, and evolving a system with decision records — every
+   lab evolves the learner's own issue tracker.
+8. **Systems & Networking** — assembly, processes, virtual memory, concurrency, sockets.
+9. **Mobile Development** *(optional)* — React Native after the web foundations.
+10. **Security & Ethical Hacking** — secure mindset first, then Linux, web (OWASP),
+    memory + crypto, and network/reversing/supply-chain — always in authorized labs.
+11. **Optional Specializations** *(later)* — Rust, Go, Java/C#, C++, game dev, and
     frontiers (embedded, compilers, cloud, ML, distributed).
 
 Security thinking is **integrated throughout** (see the `securityNote` on many topics),
-not confined to branch 9 — the dedicated branch is for depth.
+not confined to the security branch — the dedicated branch is for depth.
 
 ## Recommended path
 
@@ -76,7 +80,7 @@ guidance to help planning, never gates.
 
 ## Milestone projects
 
-Ten cross-branch capstones turn accumulated theory into working software. Each declares
+Eleven cross-branch capstones turn accumulated theory into working software. Each declares
 `unlockedBy` (the topics it needs) and `integrates` (the branches it spans), and appears
 as a distinct node in the graph. They are detailed **briefs** — requirements, non-goals,
 architecture, checkpoints, tests, progressive hints, and a solution outline — never

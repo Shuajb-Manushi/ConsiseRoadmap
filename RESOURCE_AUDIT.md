@@ -143,10 +143,69 @@ Interpreters, Atlassian user-stories guide.
   (`martinfowler.com`, `atlassian.com`, `learn.microsoft.com` are pre-listed;
   all three responded 200 in the final run anyway).
 
+## Software Architecture branch — July 2026 addition
+
+The new `arch` branch (7 topics + the `m-architecture-evolution` milestone)
+was resourced under the same standard. Every URL below was opened and verified
+on 2026-07-06 (YouTube via the oEmbed API — exact title and channel recorded;
+other hosts via direct fetch — page title and author confirmed). The retired
+`se-architecture` topic's resources were redistributed, not orphaned.
+
+### New resources added
+
+| Resource | Used by | Exact URL | Verification |
+|---|---|---|---|
+| The Hexagonal — Ports & Adapters Architecture (keynote) | arch-boundaries (primary) | https://www.youtube.com/watch?v=ChUlRa0xsWo | oEmbed: "The Hexagonal - Ports & Adapters Architecture \| Alistair Cockburn \| SAG 2025" (iSAQB) |
+| Modular Monoliths (GOTO 2018) | arch-system-shapes (primary) | https://www.youtube.com/watch?v=5OjqD-ow8GE | oEmbed: "Modular Monoliths • Simon Brown • GOTO 2018" (GOTO Conferences) |
+| The Many Meanings of Event-Driven Architecture | arch-system-shapes (alternative) | https://www.youtube.com/watch?v=STKCRSUsyP0 | oEmbed: "The Many Meanings of Event-Driven Architecture • Martin Fowler • GOTO 2017" (GOTO Conferences) |
+| API Evolution without Versioning (QCon) | arch-data-contracts (primary) | https://www.infoq.com/presentations/api-evolution-versioning/ | HTTP 200; speaker Brandon Byars; free video + transcript |
+| APIs as infrastructure (Stripe versioning) | arch-data-contracts (alternative) | https://stripe.com/blog/api-versioning | Fetched: title + author (Brandur Leach) confirmed. stripe.com rate-limits scripts (HTTP 429) → added to MANUAL_HOSTS |
+| Six Little Lines of Fail | arch-reliability (primary) | https://www.youtube.com/watch?v=j7ftSg6Uy1w | oEmbed: "Jimmy Bogard - Six Little Lines of Fail" (DevConf PL) |
+| OpenTelemetry Course — Understand Software Performance | arch-observability (primary) | https://www.youtube.com/watch?v=r8UvWSX3KA8 | oEmbed: "OpenTelemetry Course - Understand Software Performance" (freeCodeCamp.org) |
+| SRE Book Ch. 6: Monitoring Distributed Systems | arch-observability (extra) | https://sre.google/sre-book/monitoring-distributed-systems/ | HTTP 200; free online (CC BY-NC-ND) |
+| SRE Book Ch. 22: Addressing Cascading Failures | arch-reliability (extra) | https://sre.google/sre-book/addressing-cascading-failures/ | HTTP 200; free online (CC BY-NC-ND) |
+| Building Evolutionary Architectures (GOTO Book Club) | arch-evolution (primary) | https://www.youtube.com/watch?v=m2ZlX1je3as | oEmbed: "Building Evolutionary Architectures • Rebecca Parsons, Neal Ford & James Lewis • GOTO 2023" (GOTO Conferences) |
+| Documenting Architecture Decisions (Nygard) | arch-evolution (alternative) | https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions | HTTP 200; title + author confirmed |
+| Architectural Decision Records (adr.github.io) | arch-evolution (practice) | https://adr.github.io/ | HTTP 200; templates/examples hub. Placed in practice deliberately: used after Nygard's post teaches the why |
+| Strangler Fig Application (Fowler) | arch-evolution (extra) | https://martinfowler.com/bliki/StranglerFigApplication.html | HTTP 200 this run; martinfowler.com stays in MANUAL_HOSTS |
+
+### Reused catalog entries (topic-specific guidance written per use)
+
+- `ousterhoutTalk` → arch-modularity primary (was se-architecture's primary).
+- `codeAestheticNesting` → arch-modularity alternative.
+- `refactoringGuru` → arch-modularity extra (smell vocabulary framing).
+- `ianCooperTDD` → arch-boundaries alternative (behavior-at-the-port angle).
+- `fastapiTutorial`, `ostep` → arch-boundaries extra (kept from se-architecture).
+- `pgTutorial` → arch-data-contracts extra (ALTER TABLE / locks for expand-contract).
+- `mit6824` → arch-system-shapes extra (lecture 1 as the price list of distribution).
+- `coreyLogging` → arch-observability alternative (Python logging on-ramp).
+- `googleTechWriting` → arch-evolution extra (tightening ADR prose).
+
+### se-architecture consolidation
+
+- The topic was **removed from the practice branch** and its material absorbed:
+  the "Architect a Swappable System" lab moved (adapted) into `arch-boundaries`;
+  its API-versioning requirement grew into the `arch-data-contracts` lab; its
+  trust-boundary security note moved to `arch-boundaries`. No catalog entry was
+  orphaned (the purpose-group test enforces this).
+- Dependents rewired: `se-ci-docker-deploy` → `se-testing-strategy`;
+  `opt-enterprise` and `m-security-capstone` → `arch-boundaries`.
+
+### Audit run (2026-07-06, after the branch was added)
+
+**108 unique URLs — 105 OK, 2 harmless redirects (unchanged pytest/cppreference),
+1 flagged manual (`stripe.com`, verified by hand as above), and 1 transient
+fetch failure: `craftinginterpreters.com` timed out from this network during
+the run (pre-existing entry, reachable historically; re-check before assuming
+link rot — `sourceware.org` showed the same transient behavior and verified
+fine moments later).**
+
 ## Numbers
 
 - Original catalog resources audited: **33** → kept as primary/practice **11**,
   demoted to alternative/extra **21**, removed **1** (GNU C manual, dead link).
-- New verified resources added: **62** (catalog now 95 entries).
-- Topics: **72**, all with at least one verified primary; **70** have a guided
-  (video/course/interactive/lab) primary, **2** use the documented exceptions above.
+- New verified resources added: **62** (July 2026 audit) + **13** (architecture
+  branch) — catalog now **108 entries**.
+- Topics: **78** (72 − se-architecture + 7 architecture topics), all with at
+  least one verified primary; all architecture primaries are guided
+  (video/course); **2** topics use the documented exceptions above.

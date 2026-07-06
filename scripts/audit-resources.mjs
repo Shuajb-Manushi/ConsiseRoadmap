@@ -30,7 +30,13 @@ const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36";
 
 /** Hosts that commonly block bots/scripts but work in a real browser. */
-const MANUAL_HOSTS = new Set(["martinfowler.com", "www.atlassian.com", "learn.microsoft.com"]);
+const MANUAL_HOSTS = new Set([
+  "martinfowler.com",
+  "www.atlassian.com",
+  "learn.microsoft.com",
+  // stripe.com rate-limits scripted requests with HTTP 429.
+  "stripe.com",
+]);
 
 function collectUrls() {
   const files = [

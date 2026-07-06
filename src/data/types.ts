@@ -12,6 +12,7 @@ export type BranchId =
   | "web"
   | "backend"
   | "practice"
+  | "arch"
   | "systems"
   | "mobile"
   | "security"
@@ -112,6 +113,32 @@ export type Topic = {
 /** Authors write TopicDraft; nextIds are derived in topics/index.ts. */
 export type TopicDraft = Omit<Topic, "nextIds">;
 
+/**
+ * The lightweight half of a topic: everything the guided/browse cards and
+ * route-existence checks need. Authored in topics/meta/{branch}.ts; the heavy
+ * half (TopicBody) is authored in topics/body/{branch}.ts and joined back into
+ * full Topics by topics/index.ts, which only detail routes and search import.
+ * The split keeps the initial bundle free of curriculum prose.
+ */
+export type TopicMeta = Pick<
+  Topic,
+  | "id"
+  | "title"
+  | "branch"
+  | "stage"
+  | "required"
+  | "difficulty"
+  | "estimatedHours"
+  | "summary"
+  | "prerequisiteIds"
+>;
+
+/** A TopicMeta plus the derived reverse edges — what list views consume. */
+export type TopicLite = TopicMeta & { nextIds: string[] };
+
+/** The prose-heavy half of a topic, keyed by topic id in topics/body/. */
+export type TopicBody = Omit<TopicDraft, keyof TopicMeta>;
+
 export type Branch = {
   id: BranchId;
   name: string;
@@ -142,3 +169,16 @@ export type MilestoneProject = {
   solutionOutline: string[];
   extensions: string[];
 };
+
+/**
+ * The lightweight half of a milestone: what roadmap cards and route checks
+ * need. Authored in milestonesLite.ts; the heavy half (MilestoneBody) lives in
+ * milestones.ts, which joins them back into full MilestoneProjects.
+ */
+export type MilestoneLite = Pick<
+  MilestoneProject,
+  "id" | "title" | "unlockedBy" | "integrates" | "brief"
+>;
+
+/** The prose-heavy half of a milestone, keyed by milestone id. */
+export type MilestoneBody = Omit<MilestoneProject, keyof MilestoneLite>;

@@ -21,7 +21,7 @@ trustworthy resources.
 ## Highlights
 
 - **Guided roadmap** — a single vertical learning tree that flows top-to-bottom from one
-  dominant “Start here” node through nine ordered phases. Each phase says why it comes
+  dominant “Start here” node through ten ordered phases. Each phase says why it comes
   now, its hours and branches, and a clear next direction; phases expand to reveal their
   ordered topics. Milestones sit next to the phase that unlocks them, cross-branch
   prerequisites appear inside cards as “Also requires…” links, and optional
@@ -35,11 +35,18 @@ trustworthy resources.
   (Learn → Build → Prove) with one verified guided resource and exact instructions,
   alternative explanations, practice tools, collapsed extra reading, a security note,
   and connections to later topics.
-- **10 cross-branch milestone projects** with full briefs (no copy-paste source code).
-- **Global search** (button or <kbd>Ctrl/Cmd</kbd>+<kbd>K</kbd>) over titles, concepts,
-  languages, projects, and resource names, with branch / required / difficulty / hours
-  filters.
-- **Responsive, accessible, keyboard-navigable**, with optional dark mode.
+- **11 cross-branch milestone projects** with full briefs (no copy-paste source code).
+- **Global search** (button or <kbd>Ctrl/Cmd</kbd>+<kbd>K</kbd>) — a fully accessible
+  combobox dialog (focus-trapped, inert background, focus restored on close) over
+  titles, concepts, languages, projects, and resource names, with branch / required /
+  difficulty / hours filters. Result counts are always honest; every match is reachable
+  via “Show all”.
+- **Responsive, accessible, keyboard-navigable**, with optional dark mode. Both themes
+  pass WCAG AA contrast for text (checked by `npm run check:contrast`); focus is
+  managed deterministically on every route change.
+- **Fast first load** — the initial bundle carries only code and a lightweight
+  curriculum index (~72 kB gzip JS); the full topic/milestone prose loads lazily on
+  detail routes and first search.
 - **No backend, database, auth, telemetry, AI, or remote fetch.** Hash-based routing so
   it deploys anywhere static. No heavyweight diagram library — the roadmap is built from
   semantic HTML and CSS.
@@ -67,18 +74,26 @@ secrets are needed.
 src/
   data/                 # all curriculum content + types (no UI imports)
     types.ts            # Topic / Lab / Resource / Milestone / Branch interfaces
-    branches.ts         # the 11 branches and their accent colors
+    branches.ts         # the 12 branches and their accent colors
     resourceCatalog.ts  # the curated resource library (URLs live here once)
-    topics/             # one file per branch; index.ts assembles + derives nextIds
-    milestones.ts       # the 10 cross-branch capstone briefs
-    curriculum.ts       # public aggregator (start point, totals, labels)
-    search.ts           # search index + filterable query function
+    topics/
+      meta/             # one file per branch: the EAGER half (title, summary,
+                        #   hours, prerequisites) that list views and search need
+      body/             # one file per branch: the LAZY half (labs, resources,
+                        #   mastery checks) loaded only on detail routes/search
+      lite.ts           # eager index over metas (+ derived nextIds, totals)
+      index.ts          # heavy join of meta+body into full Topics (lazy chunks
+                        #   and tests only; throws on any meta/body mismatch)
+    milestonesLite.ts   # eager milestone cards (id, title, brief, unlockedBy)
+    milestones.ts       # the 11 full cross-branch capstone briefs (lazy join)
+    curriculum.ts       # eager public aggregator (start point, totals, labels)
+    search.ts           # search index + filterable query function (lazy chunk)
     *.test.ts           # data-integrity and search behavior tests
     phases.ts           # the guided learning path (ordered phases over topic ids)
   components/           # React UI
     roadmap/            # GuidedRoadmap, VerticalRoadmap (browse), Legend
     ViewSwitch, Header, SearchModal, TopicDetail, MilestoneDetail, ResourceLibrary, About
-  lib/                  # hash router, theme + media-query hooks
+  lib/                  # hash router, theme hooks, modal a11y, search paging
   styles/               # global tokens + per-area CSS (custom properties)
 ```
 
@@ -86,12 +101,18 @@ src/
 guided roadmap (`phases.ts`) and the browse catalog are two views of the same typed
 data. `nextIds` are *derived* from `prerequisiteIds`, and the guided path's ordering is
 tested to be a genuine topological sort of the prerequisite graph, so nothing can drift.
+Each topic is authored in two halves — eager meta and lazy body — joined by
+`topics/index.ts`, which throws (and tests fail) if the halves ever disagree, so the
+bundle split can't silently lose content.
 
 ## Editing the curriculum
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide. In short:
 
-- Add or edit a topic in the appropriate `src/data/topics/<branch>.ts` file.
+- Add or edit a topic's lightweight half in `src/data/topics/meta/<branch>.ts`
+  (title, summary, hours, prerequisites) and its content half in
+  `src/data/topics/body/<branch>.ts` (lab, resources, mastery checks), keyed by
+  the same topic id.
 - Only maintain `prerequisiteIds`; `nextIds` are computed for you.
 - Run `npm run test` — the integrity suite tells you (readably) if any id, reference,
   required field, resource, or milestone link is wrong, or if you introduced a cycle.

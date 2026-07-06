@@ -35,6 +35,29 @@ describe("search index", () => {
     expect(results.some((r) => r.kind === "milestone")).toBe(true);
   });
 
+  it("finds architecture topics by concept text", () => {
+    expect(searchCurriculum("ports adapters").some((r) => r.id === "arch-boundaries")).toBe(true);
+    expect(searchCurriculum("decision record").some((r) => r.id === "arch-evolution")).toBe(true);
+    expect(searchCurriculum("idempotency").some((r) => r.id === "arch-reliability")).toBe(true);
+  });
+
+  it("finds architecture topics by resource name", () => {
+    // "Modular Monoliths" is a resource title on the system-shapes topic
+    const results = searchCurriculum("modular monolith");
+    expect(results.some((r) => r.id === "arch-system-shapes")).toBe(true);
+  });
+
+  it("finds the architecture milestone", () => {
+    const results = searchCurriculum("architecture evolution");
+    expect(results.some((r) => r.id === "m-architecture-evolution" && r.kind === "milestone")).toBe(true);
+  });
+
+  it("applies the branch filter to the arch branch", () => {
+    const results = searchCurriculum("", { branch: "arch" });
+    expect(results.length).toBe(7);
+    expect(results.every((r) => r.branch === "arch")).toBe(true);
+  });
+
   it("requires all tokens to match (AND semantics)", () => {
     const results = searchCurriculum("hash table contact");
     expect(results.some((r) => r.id === "c-hash-tables")).toBe(true);

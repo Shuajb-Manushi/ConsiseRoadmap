@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { topics, topicById } from "./topics";
+import { topicsLite, topicMetaById } from "./topics/lite";
 import { branches, branchById } from "./branches";
 import { milestones } from "./milestones";
+import { milestonesLite } from "./milestonesLite";
 import { R, resourcePurposes } from "./resourceCatalog";
 import { guidedTypes } from "./types";
 import type { Resource } from "./types";
@@ -324,6 +326,46 @@ describe("milestones", () => {
   it("span multiple branches (as cross-cutting capstones)", () => {
     const singleBranch = milestones.filter((m) => m.integrates.length < 1);
     expect(singleBranch.map((m) => m.id), "milestones must integrate at least one branch").toEqual([]);
+  });
+});
+
+describe("meta/body split integrity", () => {
+  // topics/index.ts and milestones.ts already throw at import time on a
+  // missing or orphaned body; these tests make the invariant visible and
+  // pin the eager lite view to the joined heavy view.
+  it("every topic meta has exactly one body and the join preserves ids", () => {
+    expect(topics.length).toBe(topicsLite.length);
+    const joinedIds = new Set(topics.map((t) => t.id));
+    const missing = topicsLite.filter((t) => !joinedIds.has(t.id)).map((t) => t.id);
+    expect(missing, `lite topics missing from the joined view: ${missing.join(", ")}`).toEqual([]);
+  });
+
+  it("lite fields match the joined topics field-for-field", () => {
+    const problems: string[] = [];
+    for (const t of topics) {
+      const lite = topicMetaById.get(t.id);
+      if (!lite) { problems.push(`${t.id}: no lite entry`); continue; }
+      if (lite.title !== t.title) problems.push(`${t.id}: title drift`);
+      if (lite.summary !== t.summary) problems.push(`${t.id}: summary drift`);
+      if (lite.branch !== t.branch) problems.push(`${t.id}: branch drift`);
+      if (lite.estimatedHours !== t.estimatedHours) problems.push(`${t.id}: hours drift`);
+      if (lite.prerequisiteIds.join() !== t.prerequisiteIds.join()) problems.push(`${t.id}: prerequisite drift`);
+      if (lite.nextIds.join() !== t.nextIds.join()) problems.push(`${t.id}: nextIds drift`);
+    }
+    expect(problems, problems.join("\n")).toEqual([]);
+  });
+
+  it("every milestone lite entry joins to exactly one full milestone", () => {
+    expect(milestones.length).toBe(milestonesLite.length);
+    const problems: string[] = [];
+    for (const lite of milestonesLite) {
+      const full = milestones.find((m) => m.id === lite.id);
+      if (!full) { problems.push(`${lite.id}: no joined milestone`); continue; }
+      if (full.title !== lite.title || full.brief !== lite.brief) {
+        problems.push(`${lite.id}: lite/heavy field drift`);
+      }
+    }
+    expect(problems, problems.join("\n")).toEqual([]);
   });
 });
 

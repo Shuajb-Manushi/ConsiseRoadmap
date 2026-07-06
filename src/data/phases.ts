@@ -1,6 +1,6 @@
 import type { BranchId } from "./types";
-import { topicById } from "./topics";
-import { milestones } from "./milestones";
+import { topicMetaById } from "./topics/lite";
+import { milestonesLite } from "./milestonesLite";
 
 /**
  * The GUIDED learning path: an ordered set of phases that flows top-to-bottom.
@@ -194,22 +194,41 @@ export const guidedPhases: GuidedPhase[] = [
     number: 8,
     title: "Software-Engineering Practice",
     whyNow:
-      "Turn code into software: requirements, collaborative Git, clean design, a real testing strategy, architecture boundaries, CI, containers, and deployment.",
+      "Turn code into software: requirements, collaborative Git, clean design, a real testing strategy, CI, containers, and deployment.",
     branches: ["practice"],
     topicIds: [
       "se-requirements",
       "se-git-collaboration",
       "se-clean-code",
       "se-testing-strategy",
-      "se-architecture",
       "se-ci-docker-deploy",
     ],
     milestoneIds: ["m-fullstack-issue-tracker"],
+    nextDirection:
+      "Your issue tracker works and ships. Now learn to keep systems like it changeable, reliable, and observable as they grow.",
+  },
+  {
+    id: "architecture",
+    number: 9,
+    title: "Software Architecture",
+    whyNow:
+      "You've built and shipped a real system — now learn to keep it alive: modularity and boundaries, contracts and versioning, choosing a system's shape, surviving failure, seeing inside it, and evolving it with recorded decisions. Every lab works on your own issue tracker.",
+    branches: ["arch"],
+    topicIds: [
+      "arch-modularity",
+      "arch-boundaries",
+      "arch-data-contracts",
+      "arch-system-shapes",
+      "arch-reliability",
+      "arch-observability",
+      "arch-evolution",
+    ],
+    milestoneIds: ["m-architecture-evolution"],
     nextDirection: "Apply a security mindset in depth — always in authorized, legal labs.",
   },
   {
     id: "security",
-    number: 9,
+    number: 10,
     title: "Security & Ethical Hacking",
     whyNow:
       "With real systems built, learn to defend and (ethically, in authorized labs only) attack them: the secure mindset, Linux hardening, web vulnerabilities, memory corruption, and cryptography.",
@@ -280,7 +299,7 @@ export function guidedMilestonePlacements(): { milestoneId: string; phaseIndex: 
 
 /** Sum of estimated hours for a list of topic ids (skips unknown ids). */
 export function sumHours(topicIds: string[]): number {
-  return topicIds.reduce((sum, id) => sum + (topicById.get(id)?.estimatedHours ?? 0), 0);
+  return topicIds.reduce((sum, id) => sum + (topicMetaById.get(id)?.estimatedHours ?? 0), 0);
 }
 
-export const knownMilestoneIds = new Set(milestones.map((m) => m.id));
+export const knownMilestoneIds = new Set(milestonesLite.map((m) => m.id));

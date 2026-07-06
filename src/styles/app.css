@@ -30,7 +30,7 @@
   background: var(--ink);
   color: var(--paper);
 }
-.btn--primary:hover { background: var(--orange-deep); border-color: var(--orange-deep); }
+.btn--primary:hover { background: var(--accent-bg); border-color: var(--accent-bg); color: var(--on-accent); }
 .btn--ghost {
   border-color: var(--line-strong);
   background: transparent;
@@ -64,10 +64,10 @@
 }
 .brand__mark {
   width: 30px; height: 30px;
-  background: var(--orange);
+  background: var(--accent-bg);
   display: grid;
   place-items: center;
-  color: #fff;
+  color: var(--on-accent);
   font-family: var(--serif);
   font-weight: 700;
   font-size: 1.05rem;

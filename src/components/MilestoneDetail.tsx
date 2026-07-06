@@ -1,17 +1,20 @@
-import type { MilestoneProject } from "../data/types";
 import type { Route } from "../lib/useHashRoute";
 import { topicById } from "../data/topics";
-import { branchById } from "../data/curriculum";
+import { milestones } from "../data/milestones";
+import { branchById } from "../data/branches";
 import { BranchChip, Disclosure } from "./ui";
 import "../styles/detail.css";
 
 export function MilestoneDetail({
-  milestone,
+  id,
   navigate,
 }: {
-  milestone: MilestoneProject;
+  id: string;
   navigate: (r: Route) => void;
 }) {
+  // The route guard checks existence against milestonesLite; milestones.ts
+  // throws at load if the lite and heavy halves ever disagree.
+  const milestone = milestones.find((m) => m.id === id)!;
   const unlocks = milestone.unlockedBy.map((id) => topicById.get(id)).filter(Boolean);
 
   return (

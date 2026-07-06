@@ -1,50 +1,60 @@
-import type { Topic, TopicDraft } from "../types";
-import { startTopics } from "./start";
-import { cTopics } from "./c";
-import { csTopics } from "./cs";
-import { pythonTopics } from "./python";
-import { webTopics } from "./web";
-import { backendTopics } from "./backend";
-import { practiceTopics } from "./practice";
-import { systemsTopics } from "./systems";
-import { mobileTopics } from "./mobile";
-import { securityTopics } from "./security";
-import { optionalTopics } from "./optional";
-
-const drafts: TopicDraft[] = [
-  ...startTopics,
-  ...cTopics,
-  ...csTopics,
-  ...pythonTopics,
-  ...webTopics,
-  ...backendTopics,
-  ...practiceTopics,
-  ...systemsTopics,
-  ...mobileTopics,
-  ...securityTopics,
-  ...optionalTopics,
-];
+import type { Topic, TopicBody } from "../types";
+import { topicsLite } from "./lite";
+import { startBodies } from "./body/start";
+import { cBodies } from "./body/c";
+import { csBodies } from "./body/cs";
+import { pythonBodies } from "./body/python";
+import { webBodies } from "./body/web";
+import { backendBodies } from "./body/backend";
+import { practiceBodies } from "./body/practice";
+import { archBodies } from "./body/arch";
+import { systemsBodies } from "./body/systems";
+import { mobileBodies } from "./body/mobile";
+import { securityBodies } from "./body/security";
+import { optionalBodies } from "./body/optional";
 
 /**
- * Derive nextIds from prerequisiteIds: a topic's "next" topics are those that
- * list it as a prerequisite. Authors only maintain prerequisiteIds, so the two
- * directions can never drift out of sync.
+ * The HEAVY curriculum: full Topic objects joined from the eager metas
+ * (./lite.ts) and the prose bodies (./body/). Import this only from
+ * lazily-loaded modules (detail routes, search, the resource library) and
+ * tests — importing it eagerly pulls all curriculum prose into the initial
+ * bundle. List views should use ./lite.ts instead.
  */
-function withDerivedNext(list: TopicDraft[]): Topic[] {
-  const nextMap = new Map<string, string[]>();
-  for (const t of list) nextMap.set(t.id, []);
-  for (const t of list) {
-    for (const pre of t.prerequisiteIds) {
-      const arr = nextMap.get(pre);
-      // If a prerequisite id is unknown, we still record it so validation can
-      // catch it later rather than silently dropping the relationship.
-      if (arr) arr.push(t.id);
+const bodies: Record<string, TopicBody> = {
+  ...startBodies,
+  ...cBodies,
+  ...csBodies,
+  ...pythonBodies,
+  ...webBodies,
+  ...backendBodies,
+  ...practiceBodies,
+  ...archBodies,
+  ...systemsBodies,
+  ...mobileBodies,
+  ...securityBodies,
+  ...optionalBodies,
+};
+
+export const topics: Topic[] = topicsLite.map((lite) => {
+  const body = bodies[lite.id];
+  if (!body) {
+    throw new Error(
+      `Topic "${lite.id}" has a meta entry (topics/meta/) but no body (topics/body/)`
+    );
+  }
+  return { ...lite, ...body };
+});
+
+{
+  const liteIds = new Set(topicsLite.map((t) => t.id));
+  for (const id of Object.keys(bodies)) {
+    if (!liteIds.has(id)) {
+      throw new Error(
+        `Topic body "${id}" (topics/body/) has no matching meta entry (topics/meta/)`
+      );
     }
   }
-  return list.map((t) => ({ ...t, nextIds: nextMap.get(t.id) ?? [] }));
 }
-
-export const topics: Topic[] = withDerivedNext(drafts);
 
 export const topicById = new Map(topics.map((t) => [t.id, t]));
 

@@ -18,13 +18,24 @@ curriculum — all content lives in `src/data`.
 
 ## Adding a topic
 
-1. Open the branch file, e.g. `src/data/topics/python.ts`.
-2. Copy an existing `TopicDraft` object as a template and edit every field. The shape is
-   defined and documented in `src/data/types.ts`.
+Topics are authored in **two halves**, keyed by the same id, so the initial
+bundle stays small: the lightweight meta (eagerly loaded, powers the roadmap
+cards and search-result display) and the prose body (lazily loaded on the topic
+page). `src/data/topics/index.ts` joins them and throws a readable error if the
+halves ever disagree.
+
+1. Open the branch's meta file, e.g. `src/data/topics/meta/python.ts`, and add a
+   `TopicMeta` object (id, title, branch, stage, required, difficulty,
+   estimatedHours, summary, prerequisiteIds). The shapes are defined and
+   documented in `src/data/types.ts`.
+2. Open the matching body file, e.g. `src/data/topics/body/python.ts`, and add a
+   `TopicBody` entry under the **same id** (whyItMatters, concepts,
+   practicalUses, lab, resources, masteryChecks, securityNote).
 3. Give it a unique kebab-case `id` (e.g. `py-dataclasses`).
 4. Set `prerequisiteIds` to existing topic ids. Set `stage` to its position in the
    branch (used for ordering). Choose `required`, `difficulty`, and an honest
-   `estimatedHours`.
+   `estimatedHours`. Add the id to its guided phase in `src/data/phases.ts`
+   (respecting prerequisite order — the tests check it).
 5. Fill the **lab** fully (requirements, checkpoints, hints, validation,
    solutionOutline, extensions) and the four resource tiers (`primary`,
    `alternatives`, `practice`, `extra`) plus some **mastery checks**. The primary
@@ -45,10 +56,14 @@ Edit the object in place. If you change its `id`, follow rule 2. If you change
 
 ## Adding or editing a milestone
 
-Milestones live in `src/data/milestones.ts`. `unlockedBy` must reference existing topic
-ids; `integrates` must reference existing branch ids. Fill `requirements`, `nonGoals`,
-`architecture`, `checkpoints`, `tests`, `hints`, `solutionOutline`, and `extensions`.
-Do **not** include full source code — the value is in the brief.
+Milestones are split the same way as topics: the card-level half (id, title,
+brief, `unlockedBy`, `integrates`) lives in `src/data/milestonesLite.ts`; the
+full brief (`requirements`, `nonGoals`, `architecture`, `checkpoints`, `tests`,
+`hints`, `solutionOutline`, `extensions`) lives in `src/data/milestones.ts`
+under the same id. `unlockedBy` must reference existing topic (or milestone)
+ids; `integrates` must reference existing branch ids. Place the milestone in a
+guided phase in `src/data/phases.ts`. Do **not** include full source code — the
+value is in the brief.
 
 ## Writing good labs and projects
 

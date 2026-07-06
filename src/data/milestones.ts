@@ -1,18 +1,14 @@
-import type { MilestoneProject } from "./types";
+import type { MilestoneBody, MilestoneProject } from "./types";
+import { milestonesLite } from "./milestonesLite";
+
 
 /**
  * Cross-branch capstone projects. Each is unlocked by specific topics and
  * integrates skills from multiple branches. These are detailed briefs, not
  * source code — the learning is in building them.
  */
-export const milestones: MilestoneProject[] = [
-  {
-    id: "m-c-database",
-    title: "C Personal Database",
-    unlockedBy: ["c-hash-tables", "c-file-io", "c-modular-build", "testing-fundamentals"],
-    integrates: ["c", "start"],
-    brief:
-      "A single-file, persistent database engine in C: store, query, update, and delete records with fields, backed by a binary file format you design and a hash index for fast lookup. Your dynamic memory, file I/O, modular C, and data-structure skills converge into a real, useful program.",
+const milestoneBodies: Record<string, MilestoneBody> = {
+  "m-c-database": {
     requirements: [
       "A record type with several typed fields (e.g., a contacts or inventory database)",
       "CRUD operations: create, read (by key and by scan/filter), update, delete",
@@ -63,13 +59,7 @@ export const milestones: MilestoneProject[] = [
       "Add a compaction command that rewrites the file without deleted records",
     ],
   },
-  {
-    id: "m-c-search-engine",
-    title: "C Text Search Engine",
-    unlockedBy: ["c-hash-tables", "c-trees", "c-file-io", "cs-big-o"],
-    integrates: ["c", "cs"],
-    brief:
-      "A search engine over a directory of text files: tokenize documents, build an inverted index (word → documents containing it), and answer multi-word queries ranked by relevance — with performance you measure. Hashing, dynamic structures, file traversal, and complexity analysis in one substantial system.",
+  "m-c-search-engine": {
     requirements: [
       "Recursively traverse a directory, reading all text files",
       "Tokenize documents (words, case-folded, punctuation-stripped) using your string-handling skills",
@@ -120,13 +110,7 @@ export const milestones: MilestoneProject[] = [
       "Persist the index to disk and reload it (your file-format skills)",
     ],
   },
-  {
-    id: "m-python-automation",
-    title: "Python Automation Toolkit",
-    unlockedBy: ["py-files-stdlib", "py-testing-cli", "py-functions-errors"],
-    integrates: ["python", "start"],
-    brief:
-      "A cohesive toolkit of file-automation utilities — organizer, duplicate detector, log analyzer — unified under one CLI, with the safety features that distinguish real automation: dry-run previews, undo journals, configuration, structured logging, and a real test suite. The tool you'll actually keep using.",
+  "m-python-automation": {
     requirements: [
       "A unified CLI with subcommands: organize, dedupe, analyze-logs (and more as desired)",
       "File organizer with rule-based sorting, dry-run default, and a reversible undo journal",
@@ -177,13 +161,7 @@ export const milestones: MilestoneProject[] = [
       "Add more tools sharing the same infrastructure",
     ],
   },
-  {
-    id: "m-python-task-cli",
-    title: "Python / SQLite Task CLI",
-    unlockedBy: ["py-testing-cli", "py-classes-types", "db-relational-thinking"],
-    integrates: ["python", "backend"],
-    brief:
-      "A polished task-manager CLI backed by SQLite: schema design with migrations, rich commands (add, list with filters, complete, stats), full test coverage, and proper packaging. The professional Python project skeleton, complete — bridging Python and databases.",
+  "m-python-task-cli": {
     requirements: [
       "A well-designed SQLite schema with a schema_version/migrations mechanism from day one",
       "Commands: add (with due dates, tags, priority), list (filter by status/tag/overdue, sort), done, delete, stats",
@@ -234,13 +212,7 @@ export const milestones: MilestoneProject[] = [
       "Add a down-migration (rollback) capability",
     ],
   },
-  {
-    id: "m-vanilla-web",
-    title: "Vanilla Web Application",
-    unlockedBy: ["web-dom-async", "web-css", "web-html-a11y"],
-    integrates: ["web"],
-    brief:
-      "A complete, framework-free web application (an expense or inventory tracker) demonstrating mastery of the platform itself: semantic accessible HTML, responsive CSS, DOM manipulation, event handling, browser storage, and honest data states — proving you understand what frameworks abstract before relying on them.",
+  "m-vanilla-web": {
     requirements: [
       "Semantic, accessible HTML (landmarks, forms with labels, keyboard operable, zero axe violations)",
       "Responsive CSS using your design-token system; works from mobile to desktop",
@@ -291,13 +263,7 @@ export const milestones: MilestoneProject[] = [
       "Add a service worker for offline use (preview of PWAs)",
     ],
   },
-  {
-    id: "m-fullstack-issue-tracker",
-    title: "Full-Stack Issue Tracker",
-    unlockedBy: ["web-react", "db-fastapi", "db-auth", "se-ci-docker-deploy", "web-frontend-quality"],
-    integrates: ["web", "backend", "practice"],
-    brief:
-      "The flagship project: a complete issue tracker with a React/TypeScript frontend, a FastAPI/PostgreSQL backend, real authentication and authorization, comprehensive testing, structured logging, CI, and deployment. The project that proves you're a full-stack engineer — and the throughline of the entire web and backend branches.",
+  "m-fullstack-issue-tracker": {
     requirements: [
       "React/TypeScript frontend: issue list with search/filter, detail views, create/edit forms, all four data states, routing (hash-based for static hosting)",
       "FastAPI/PostgreSQL backend: full CRUD, validation, pagination/filtering, correct status codes and error shapes — matching your API design",
@@ -315,7 +281,7 @@ export const milestones: MilestoneProject[] = [
     architecture: [
       "Clean layering front and back: React components over a typed data-layer (anti-corruption boundary); FastAPI handlers over core logic over a storage interface",
       "The frontend's data layer is swappable from mock to real API without touching components",
-      "The backend's domain core is independent of framework and database (your architecture lab)",
+      "Business logic separated from the framework and database behind testable seams (your testing-strategy lab); the Software Architecture phase will later harden these into full boundaries",
       "Auth as a cross-cutting concern via dependency injection; authorization checked per resource",
       "CI encodes all quality gates; deployment is reproducible and configured by environment",
     ],
@@ -349,13 +315,7 @@ export const milestones: MilestoneProject[] = [
       "Add comments, labels, and search improvements",
     ],
   },
-  {
-    id: "m-networked-chat",
-    title: "Networked Chat System",
-    unlockedBy: ["systems-networking", "systems-concurrency", "cs-state-machines"],
-    integrates: ["systems", "c"],
-    brief:
-      "A robust multi-client chat system (C or Python) with a deliberately designed protocol: concurrent clients, message framing, malformed-message resilience, and packet inspection with Wireshark. Networking, concurrency, and protocol design proven under adversarial conditions.",
+  "m-networked-chat": {
     requirements: [
       "A server handling many concurrent clients (threads or async/select) and broadcasting messages",
       "A concurrent client (send and receive simultaneously)",
@@ -406,13 +366,7 @@ export const milestones: MilestoneProject[] = [
       "Add a UDP presence/heartbeat feature and contrast reliability",
     ],
   },
-  {
-    id: "m-http-server-c",
-    title: "HTTP Server in C",
-    unlockedBy: ["systems-networking", "c-file-io", "systems-concurrency", "cs-state-machines"],
-    integrates: ["systems", "c", "web"],
-    brief:
-      "A working HTTP/1.1 server in C serving static files: parse requests, handle methods and status codes, serve files with correct content types, and enforce strict security limits — with concurrency as an extension. The project that connects your C, systems, and web knowledge into the thing that powers the web.",
+  "m-http-server-c": {
     requirements: [
       "Accept TCP connections and parse HTTP/1.1 requests (request line, headers) as a robust state machine",
       "Serve static files from a document root with correct Content-Type and Content-Length",
@@ -464,13 +418,7 @@ export const milestones: MilestoneProject[] = [
       "Add simple dynamic routes",
     ],
   },
-  {
-    id: "m-react-native-companion",
-    title: "React Native Companion",
-    unlockedBy: ["mobile-app-data", "mobile-react-native", "db-fastapi"],
-    integrates: ["mobile", "web", "backend"],
-    brief:
-      "An Expo/TypeScript mobile client for your existing issue-tracker backend, with the mobile-critical features: authentication with secure token storage, offline-capable browsing, optimistic creation with sync, and honest error/offline states. Proves your foundations extend to mobile without a separate beginner path.",
+  "m-react-native-companion": {
     requirements: [
       "An Expo/TypeScript app authenticating against your issue-tracker API with secure token storage (secure enclave, not plain storage)",
       "Browse and view issues, cached locally for offline access",
@@ -520,13 +468,62 @@ export const milestones: MilestoneProject[] = [
       "Handle true edit conflicts between devices",
     ],
   },
-  {
-    id: "m-security-capstone",
-    title: "Secure Engineering Capstone",
-    unlockedBy: ["sec-web-vulns", "sec-memory-crypto", "m-fullstack-issue-tracker", "se-architecture"],
-    integrates: ["security", "backend", "web", "practice"],
-    brief:
-      "The culminating security project: take a complete application (your issue tracker or a purpose-built one), threat-model it, attack it in an authorized local environment, remediate every finding, and document the trade-offs — demonstrating secure engineering end to end, always within legal, authorized boundaries.",
+  "m-architecture-evolution": {
+    requirements: [
+      "A decision log: your branch mini-ADRs consolidated to one template, plus retroactive ADRs for the unrecorded founding decisions — every ADR naming the quality attributes (changeability, reliability, observability, latency) it trades between",
+      "Explicit quality-attribute targets for the system, written down and measurable (e.g., p95 read latency under load, zero lost notifications through a worker restart, core testable with no infrastructure)",
+      "Enforced boundaries: the domain core free of framework/DB imports, checked mechanically in CI (a fitness function), with contract tests at every port — storage adapters and the queue seam",
+      "Automated tests at the right levels: fast core tests with no infrastructure, adapter contract tests per implementation, failure-mode tests (timeout, retry, duplicate delivery), and at least one end-to-end path",
+      "Working observability: structured logs with a correlation id crossing the queue hop, golden-signal metrics, and a health endpoint — demonstrated by reconstructing one request's full story",
+      "A scripted failure/recovery exercise: kill the database mid-request and the worker mid-message, black-hole the notification target; document designed vs. observed behavior and the recovery steps",
+      "A migration/evolution plan for one real upcoming change, strangler-fig style with slices, proof metrics, and rollback moves — and the first slice executed behind a facade",
+      "A final architecture document: the module/dependency map as built, the ADR index, and the criteria a future maintainer should use to revisit the big decisions",
+    ],
+    nonGoals: [
+      "Splitting into microservices (one async seam is the correct amount of distribution here)",
+      "Adopting new infrastructure for its own sake (no Kubernetes, no service mesh, no second database)",
+      "A big-bang rewrite of any component (the migration plan must be incremental or it fails the brief)",
+      "Dashboards beyond the golden signals (observability is judged by questions you can answer, not panels)",
+    ],
+    architecture: [
+      "The tracker as evolved through the branch: domain core behind ports; PostgreSQL, FastAPI, and the queue as adapters; one asynchronous worker for notifications",
+      "CI as the architecture's guardian: the dependency fitness function, contract tests per adapter, and failure-mode tests all gate merges",
+      "Telemetry as a first-class component: logs/metrics designed with the same care as the API contract",
+      "The strangler facade routing between old and new implementations of the migrated corner, observable per path",
+    ],
+    checkpoints: [
+      "The ADR log reads coherently and a newcomer can answer 'why is it shaped this way?' from it alone",
+      "The fitness function and contract tests fail CI when deliberately violated (demonstrate once)",
+      "The failure drill runs from a script and the system degrades and recovers as designed, with no manual data repair",
+      "One request's story — API through queue to worker — is reconstructed from telemetry in under a minute",
+      "The first migration slice serves real traffic with the old path intact and a working rollback toggle",
+      "Every quality-attribute target is either met with evidence or has a written, honest gap analysis",
+    ],
+    tests: [
+      "Core domain tests run with no database or network and stay fast (that speed is itself an architectural assertion)",
+      "One contract-test suite passes against every adapter of each port",
+      "Failure-mode tests: timeout enforcement, bounded retry with backoff, duplicate-delivery idempotency, dead-letter routing",
+      "An end-to-end test covering the full path including the async hop",
+      "The CI fitness function: no framework/DB imports inside the core, no new dependency cycles",
+    ],
+    hints: [
+      "Start from the quality attributes, not the code: write the targets first, then audit which ones the current system already meets — that gap list is your work plan.",
+      "The failure drill script is the most valuable artifact for a reviewer: make it runnable by someone else (`./drill.sh` with numbered scenarios beats prose instructions).",
+      "Retroactive ADRs feel awkward to write; do them anyway. The discipline of honestly recording a years-old decision's consequences is the judgment this milestone exists to prove.",
+      "If a requirement tempts you toward new infrastructure, re-read the non-goals: the brief rewards restraint with evidence over ambition with diagrams.",
+    ],
+    solutionOutline: [
+      "The milestone integrates the whole branch: modularity gives the map, boundaries give the enforceable structure, contracts govern the edges, the chosen shape stays a modular monolith with one seam, reliability and observability make it survivable and visible, and the ADR log plus migration plan make it evolvable.",
+      "Architectural judgment shows up as restraint under pressure: explicit quality attributes turn taste into testable claims, and non-goals turn 'we could' into 'we deliberately won't'.",
+      "The failure drill and the migration slice are the two proofs that can't be faked on paper: one shows the system behaves as designed when reality misbehaves, the other shows the architecture can change while it runs — which is the whole point of having one.",
+    ],
+    extensions: [
+      "Execute the migration's second slice and update the plan with what the first taught you",
+      "Add a lightweight architecture diagram generated from the real dependency graph, so the docs cannot drift",
+      "Run the failure drill against the deployed instance (not just locally) and reconcile any behavioral differences",
+    ],
+  },
+  "m-security-capstone": {
     requirements: [
       "A complete application to secure (your full-stack issue tracker is ideal)",
       "A thorough threat model: assets, adversaries, trust boundaries, and attack surface (your mindset lab, applied fully)",
@@ -577,4 +574,21 @@ export const milestones: MilestoneProject[] = [
       "Practice responsible disclosure norms by writing a mock disclosure report",
     ],
   },
-];
+};
+
+export const milestones: MilestoneProject[] = milestonesLite.map((lite) => {
+  const body = milestoneBodies[lite.id];
+  if (!body) {
+    throw new Error(`Milestone "${lite.id}" has a lite entry but no body in milestones.ts`);
+  }
+  return { ...lite, ...body };
+});
+
+{
+  const liteIds = new Set(milestonesLite.map((m) => m.id));
+  for (const id of Object.keys(milestoneBodies)) {
+    if (!liteIds.has(id)) {
+      throw new Error(`Milestone body "${id}" has no matching entry in milestonesLite.ts`);
+    }
+  }
+}
