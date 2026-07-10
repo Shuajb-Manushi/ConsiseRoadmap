@@ -14,6 +14,9 @@ import "./styles/app.css";
 const TopicDetail = lazy(() =>
   import("./components/TopicDetail").then((m) => ({ default: m.TopicDetail }))
 );
+const StudySession = lazy(() =>
+  import("./components/StudySession").then((m) => ({ default: m.StudySession }))
+);
 const MilestoneDetail = lazy(() =>
   import("./components/MilestoneDetail").then((m) => ({ default: m.MilestoneDetail }))
 );
@@ -26,8 +29,17 @@ const SearchModal = lazy(() =>
 
 function RouteFallback() {
   return (
-    <div className="container detail-page" aria-busy="true">
-      <p>Loading…</p>
+    <div className="container detail-page route-fallback" aria-busy="true" aria-live="polite">
+      <p className="route-fallback__eyebrow">Opening your learning material</p>
+      <div className="route-fallback__line route-fallback__line--title" />
+      <div className="route-fallback__line route-fallback__line--wide" />
+      <div className="route-fallback__line route-fallback__line--medium" />
+      <div className="route-fallback__panel">
+        <div className="route-fallback__line route-fallback__line--short" />
+        <div className="route-fallback__line route-fallback__line--wide" />
+        <div className="route-fallback__line route-fallback__line--medium" />
+      </div>
+      <span className="visually-hidden">Loading…</span>
     </div>
   );
 }
@@ -79,6 +91,7 @@ export function App() {
       <main id="main" ref={mainRef} tabIndex={-1} className="app-main">
         <Suspense fallback={<RouteFallback />}>
           {route.name === "roadmap" && <RoadmapView navigate={navigate} />}
+          {route.name === "session" && <SessionRoute id={route.id} navigate={navigate} />}
           {route.name === "topic" && <TopicRoute id={route.id} navigate={navigate} />}
           {route.name === "milestone" && <MilestoneRoute id={route.id} navigate={navigate} />}
           {route.name === "resources" && <ResourceLibrary navigate={navigate} />}
@@ -89,12 +102,12 @@ export function App() {
       <footer className="app-footer">
         <div className="container">
           <p>
-            <strong>ConciseRoadmaps</strong> — a free, static, practice-first path
-            from C fundamentals to self-sufficient software engineering. Learn theory
-            by using it. Everything is unlocked.
+            <strong>ConciseRoadmaps</strong> — a calm, practice-first path from C
+            fundamentals to self-sufficient software engineering.
           </p>
           <p className="app-footer__meta">
-            No accounts, no tracking, no backend. Built with React and TypeScript.
+            No account, no streaks, no telemetry. Your progress, session checks, and journal
+            stay in this browser and can leave as one JSON file.
           </p>
         </div>
       </footer>
@@ -106,6 +119,11 @@ export function App() {
       )}
     </div>
   );
+}
+
+function SessionRoute({ id, navigate }: { id: string; navigate: ReturnType<typeof useHashRoute>["navigate"] }) {
+  if (!topicMetaById.has(id)) return <NotFound what={`topic "${id}"`} navigate={navigate} />;
+  return <StudySession id={id} navigate={navigate} />;
 }
 
 function TopicRoute({ id, navigate }: { id: string; navigate: ReturnType<typeof useHashRoute>["navigate"] }) {

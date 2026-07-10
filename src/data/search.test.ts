@@ -90,4 +90,19 @@ describe("search index", () => {
   it("empty query returns everything", () => {
     expect(searchCurriculum("").length).toBe(searchDocs.length);
   });
+
+  it("applies the completion filter against a done set", () => {
+    const done = new Set(["c-pointers-arrays", "m-c-database"]);
+    const completed = searchCurriculum("", { completion: "completed" }, done);
+    expect(completed.map((r) => r.id).sort()).toEqual(["c-pointers-arrays", "m-c-database"]);
+    const remaining = searchCurriculum("", { completion: "remaining" }, done);
+    expect(remaining.length).toBe(searchDocs.length - 2);
+    expect(remaining.some((r) => r.id === "c-pointers-arrays")).toBe(false);
+  });
+
+  it("completion filter defaults to all when no done set is provided", () => {
+    expect(searchCurriculum("", { completion: "completed" }).length).toBe(0);
+    expect(searchCurriculum("", { completion: "remaining" }).length).toBe(searchDocs.length);
+    expect(searchCurriculum("", { completion: "all" }).length).toBe(searchDocs.length);
+  });
 });

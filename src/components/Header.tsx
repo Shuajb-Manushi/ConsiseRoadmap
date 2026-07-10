@@ -17,13 +17,20 @@ export function Header({
   onToggleTheme: () => void;
 }) {
   const isCurrent = (name: Route["name"]) => (route.name === name ? "page" : undefined);
+  const goToJourney = () => {
+    navigate({ name: "roadmap" });
+    window.setTimeout(
+      () => document.getElementById("journey")?.scrollIntoView({ behavior: "smooth" }),
+      50
+    );
+  };
 
   return (
     <header className="header">
       <div className="header__inner">
         <button className="brand" onClick={() => navigate({ name: "roadmap" })} aria-label="ConciseRoadmaps home">
-          <span className="brand__mark" aria-hidden="true">C</span>
-          <span className="brand__name">ConciseRoadmaps</span>
+          <span className="brand__mark" aria-hidden="true">cr/</span>
+          <span className="brand__name">Concise<span>Roadmaps</span></span>
         </button>
 
         <button className="header__search" onClick={onOpenSearch} aria-label="Open search (Control or Command + K)">
@@ -33,14 +40,17 @@ export function Header({
         </button>
 
         <nav className="header__nav" aria-label="Primary">
-          <button className="navlink" aria-current={isCurrent("roadmap")} onClick={() => navigate({ name: "roadmap" })}>
-            Roadmap
+          <button className="navlink" aria-current={route.name === "roadmap" || route.name === "session" ? "page" : undefined} onClick={() => navigate({ name: "roadmap" })}>
+            Today
+          </button>
+          <button className="navlink" onClick={goToJourney}>
+            Journey
           </button>
           <button className="navlink" aria-current={isCurrent("resources")} onClick={() => navigate({ name: "resources" })}>
-            Resources
+            Library
           </button>
           <button className="navlink" aria-current={isCurrent("about")} onClick={() => navigate({ name: "about" })}>
-            About
+            Method
           </button>
           <button
             className="icon-btn"

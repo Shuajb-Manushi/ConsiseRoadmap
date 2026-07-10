@@ -1,7 +1,11 @@
+import { useState } from "react";
 import type { Route } from "../lib/useHashRoute";
 import { topicById } from "../data/topics";
 import { milestones } from "../data/milestones";
 import { branchById } from "../data/branches";
+import { useProgress } from "../lib/useProgress";
+import { progressStore } from "../lib/progressStore";
+import { milestoneReadiness } from "../lib/progress";
 import { BranchChip, Disclosure } from "./ui";
 import "../styles/detail.css";
 
@@ -15,7 +19,21 @@ export function MilestoneDetail({
   // The route guard checks existence against milestonesLite; milestones.ts
   // throws at load if the lite and heavy halves ever disagree.
   const milestone = milestones.find((m) => m.id === id)!;
-  const unlocks = milestone.unlockedBy.map((id) => topicById.get(id)).filter(Boolean);
+  const { done } = useProgress();
+  const completed = done.has(milestone.id);
+  // unlockedBy may contain milestone ids too (e.g. the security capstone
+  // requires the issue tracker) — readiness resolves both kinds.
+  const readiness = milestoneReadiness(done, milestone);
+  const [progressStatus, setProgressStatus] = useState("");
+
+  const toggleCompleted = () => {
+    progressStore.toggle(milestone.id);
+    setProgressStatus(
+      progressStore.isDone(milestone.id)
+        ? `${milestone.title} marked complete.`
+        : `${milestone.title} marked not complete.`
+    );
+  };
 
   return (
     <article className="container detail-page topic-detail">
@@ -33,16 +51,56 @@ export function MilestoneDetail({
         </div>
         <h1>{milestone.title}</h1>
         <p className="detail-summary">{milestone.brief}</p>
+        <div className="milestone-complete">
+          <button className="complete-toggle" aria-pressed={completed} onClick={toggleCompleted}>
+            <span className="complete-toggle__box" aria-hidden="true">✓</span>
+            Completed
+          </button>
+          <span className="visually-hidden" role="status" aria-live="polite">{progressStatus}</span>
+        </div>
       </header>
 
       <section className="detail-section">
         <h2>Skills it integrates</h2>
-        <p className="detail-hint">This project pulls together topics from across the roadmap:</p>
+        <p
+          className={`milestone-readiness ${
+            completed || readiness.ready ? "milestone-readiness--go" : ""
+          }`}
+        >
+          {completed
+            ? "You've completed this milestone."
+            : readiness.ready
+              ? "Ready to start — everything this project needs is complete."
+              : `${readiness.done} of ${readiness.total} things it builds on are complete — you can start anytime; everything is unlocked.`}
+        </p>
         <div className="pill-row">
-          {unlocks.map((t) => t && (
-            <button key={t.id} className="pill" onClick={() => navigate({ name: "topic", id: t.id })}>
-              <span className="pill__dot" style={{ background: `var(--b-${t.branch})` }} />
-              {t.title}
+          {readiness.entries.map((e) => (
+            <button
+              key={e.id}
+              className={`pill ${e.kind === "milestone" ? "pill--milestone" : ""}`}
+              onClick={() =>
+                navigate(
+                  e.kind === "milestone"
+                    ? { name: "milestone", id: e.id }
+                    : { name: "topic", id: e.id }
+                )
+              }
+            >
+              {e.kind === "milestone" ? (
+                <span aria-hidden="true">★ </span>
+              ) : (
+                <span
+                  className="pill__dot"
+                  style={{ background: `var(--b-${topicById.get(e.id)?.branch ?? "start"})` }}
+                />
+              )}
+              {e.title}
+              {e.done && (
+                <>
+                  <span className="pill__done" aria-hidden="true">✓</span>
+                  <span className="visually-hidden">(completed)</span>
+                </>
+              )}
             </button>
           ))}
         </div>

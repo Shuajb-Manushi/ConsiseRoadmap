@@ -1,9 +1,12 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Topic, Resource } from "../data/types";
 import type { Route } from "../lib/useHashRoute";
 import { topicById } from "../data/topics";
 import { branchById } from "../data/branches";
 import { milestones } from "../data/milestones";
+import { useProgress } from "../lib/useProgress";
+import { progressStore } from "../lib/progressStore";
+import { guidedNeighbors } from "../lib/progress";
 import { RequiredChip, DifficultyChip, HoursChip, BranchChip, Disclosure } from "./ui";
 import "../styles/detail.css";
 
@@ -16,14 +19,81 @@ export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route)
   const nexts = topic.nextIds.map((id) => topicById.get(id)).filter(Boolean) as Topic[];
   const relatedMilestones = milestones.filter((m) => m.unlockedBy.includes(topic.id));
   const primary = topic.resources.primary[0];
+  const { done } = useProgress();
+  const completed = done.has(topic.id);
+  const neighbors = guidedNeighbors(topic.id);
+  const prevTopic = neighbors.prevId ? topicById.get(neighbors.prevId) : null;
+  const nextTopic = neighbors.nextId ? topicById.get(neighbors.nextId) : null;
 
+  const detailRef = useRef<HTMLElement>(null);
+  const planRef = useRef<HTMLElement>(null);
   const labRef = useRef<HTMLElement>(null);
   const masteryRef = useRef<HTMLElement>(null);
+  const connectionsRef = useRef<HTMLElement>(null);
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [copyStatus, setCopyStatus] = useState("");
+  const [progressStatus, setProgressStatus] = useState("");
+
+  const toggleCompleted = () => {
+    progressStore.toggle(topic.id);
+    setProgressStatus(
+      progressStore.isDone(topic.id)
+        ? `${topic.title} marked complete.`
+        : `${topic.title} marked not complete.`
+    );
+  };
   const scrollTo = (ref: React.RefObject<HTMLElement>) =>
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
+  useEffect(() => {
+    const updateProgress = () => {
+      const detail = detailRef.current;
+      if (!detail) return;
+      const top = detail.getBoundingClientRect().top + window.scrollY;
+      const available = Math.max(1, detail.offsetHeight - window.innerHeight * 0.7);
+      const progress = Math.round(Math.min(100, Math.max(0, ((window.scrollY - top) / available) * 100)));
+      setReadingProgress(progress);
+    };
+
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, [id]);
+
+  useEffect(() => {
+    if (!copyStatus) return;
+    const timeout = window.setTimeout(() => setCopyStatus(""), 2400);
+    return () => window.clearTimeout(timeout);
+  }, [copyStatus]);
+
+  const copyLink = async () => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+      } else {
+        const input = document.createElement("textarea");
+        input.value = window.location.href;
+        input.setAttribute("readonly", "");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.append(input);
+        input.select();
+        const copied = document.execCommand("copy");
+        input.remove();
+        if (!copied) throw new Error("Copy command was unavailable");
+      }
+      setCopyStatus("Link copied");
+    } catch {
+      setCopyStatus("Copy unavailable — use the address bar");
+    }
+  };
+
   return (
-    <article className="container detail-page topic-detail">
+    <article className="container detail-page topic-detail" ref={detailRef}>
       <button className="detail-back" onClick={() => navigate({ name: "roadmap" })}>
         ← Back to roadmap
       </button>
@@ -37,7 +107,42 @@ export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route)
         </div>
         <h1>{topic.title}</h1>
         <p className="detail-summary">{topic.summary}</p>
+        <div className="detail-head__actions">
+          <button className="btn btn--primary" onClick={() => navigate({ name: "session", id: topic.id })}>
+            Plan my next hour →
+          </button>
+          <span>Turn this topic into one Learn → Build → Prove session.</span>
+        </div>
       </header>
+
+      <div className="topic-compass">
+        <div className="topic-progress" aria-label={`${readingProgress}% of this topic read`}>
+          <span className="topic-progress__label">{readingProgress}% read</span>
+          <span className="topic-progress__track" aria-hidden="true">
+            <span className="topic-progress__fill" style={{ width: `${readingProgress}%` }} />
+          </span>
+        </div>
+        <nav className="topic-compass__nav" aria-label="On this page">
+          <span className="topic-compass__label">On this page</span>
+          <button onClick={() => scrollTo(planRef)}>Plan</button>
+          <button onClick={() => scrollTo(labRef)}>Lab</button>
+          <button onClick={() => scrollTo(masteryRef)}>Mastery</button>
+          {(nexts.length > 0 || relatedMilestones.length > 0) && (
+            <button onClick={() => scrollTo(connectionsRef)}>Next</button>
+          )}
+        </nav>
+        <button
+          className="complete-toggle complete-toggle--sm"
+          aria-pressed={completed}
+          onClick={toggleCompleted}
+        >
+          <span className="complete-toggle__box" aria-hidden="true">✓</span>
+          Completed
+        </button>
+        <button className="topic-compass__copy" onClick={copyLink}>Copy link</button>
+        <span className="topic-compass__status" role="status" aria-live="polite">{copyStatus}</span>
+        <span className="visually-hidden" role="status" aria-live="polite">{progressStatus}</span>
+      </div>
 
       <section className="detail-section detail-why">
         <h2>Why this matters</h2>
@@ -45,7 +150,7 @@ export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route)
       </section>
 
       {/* ---------- LEARNING PLAN ---------- */}
-      <section className="detail-section learning-plan" aria-label="Your learning plan">
+      <section className="detail-section learning-plan" aria-label="Your learning plan" ref={planRef}>
         <h2>Your learning plan</h2>
         <ol className="plan-steps">
           <li className="plan-step">
@@ -92,6 +197,12 @@ export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route)
               <button key={p.id} className="pill" onClick={() => navigate({ name: "topic", id: p.id })}>
                 <span className="pill__dot" style={{ background: `var(--b-${p.branch})` }} />
                 {p.title}
+                {done.has(p.id) && (
+                  <>
+                    <span className="pill__done" aria-hidden="true">✓</span>
+                    <span className="visually-hidden">(completed)</span>
+                  </>
+                )}
               </button>
             ))}
           </div>
@@ -155,6 +266,16 @@ export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route)
         <ul className="tick-list tick-list--check">
           {topic.masteryChecks.map((m, i) => <li key={i}>{m}</li>)}
         </ul>
+        <div className="mastery-complete">
+          <p className="mastery-complete__hint">
+            Built the lab and can honestly pass these checks? Record it — progress lives only in
+            this browser.
+          </p>
+          <button className="complete-toggle" aria-pressed={completed} onClick={toggleCompleted}>
+            <span className="complete-toggle__box" aria-hidden="true">✓</span>
+            Completed
+          </button>
+        </div>
       </section>
 
       {topic.securityNote && (
@@ -205,7 +326,7 @@ export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route)
 
       {/* ---------- CONNECTIONS ---------- */}
       {(nexts.length > 0 || relatedMilestones.length > 0) && (
-        <section className="detail-section connections">
+        <section className="detail-section connections" ref={connectionsRef}>
           <h2>Where this leads</h2>
           {nexts.length > 0 && (
             <>
@@ -227,12 +348,52 @@ export function TopicDetail({ id, navigate }: { id: string; navigate: (r: Route)
                 {relatedMilestones.map((m) => (
                   <button key={m.id} className="pill pill--milestone" onClick={() => navigate({ name: "milestone", id: m.id })}>
                     ★ {m.title}
+                    {done.has(m.id) && (
+                      <>
+                        <span className="pill__done" aria-hidden="true">✓</span>
+                        <span className="visually-hidden">(completed)</span>
+                      </>
+                    )}
                   </button>
                 ))}
               </div>
             </>
           )}
         </section>
+      )}
+
+      {(prevTopic || nextTopic) && (
+        <nav className="topic-pager" aria-label="Guided path">
+          {neighbors.label && <p className="topic-pager__pos">{neighbors.label} on the guided path</p>}
+          {prevTopic ? (
+            <button
+              className="topic-pager__btn"
+              onClick={() => navigate({ name: "topic", id: prevTopic.id })}
+            >
+              <span className="topic-pager__kicker">← Previous</span>
+              <span className="topic-pager__title">{prevTopic.title}</span>
+            </button>
+          ) : (
+            <span className="topic-pager__spacer" aria-hidden="true" />
+          )}
+          {nextTopic ? (
+            <button
+              className="topic-pager__btn topic-pager__btn--next"
+              onClick={() => navigate({ name: "topic", id: nextTopic.id })}
+            >
+              <span className="topic-pager__kicker">Next →</span>
+              <span className="topic-pager__title">{nextTopic.title}</span>
+            </button>
+          ) : (
+            <button
+              className="topic-pager__btn topic-pager__btn--next"
+              onClick={() => navigate({ name: "roadmap" })}
+            >
+              <span className="topic-pager__kicker">End of the path →</span>
+              <span className="topic-pager__title">Back to the roadmap</span>
+            </button>
+          )}
+        </nav>
       )}
     </article>
   );

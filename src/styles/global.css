@@ -52,6 +52,11 @@
   --required-ink: var(--ink);
   --optional-ink: var(--ink-faint);
 
+  /* Completed-state green: readable as text on canvas/paper AND as a fill
+     under a --paper check glyph, in both themes (enforced by check-contrast). */
+  --done: #2f6f50;
+  --done-tint: #e7efe6;
+
   /* Inverse / emphasized surfaces (milestone cards, primary actions).
      These are explicit in BOTH themes so a "dark card with light text" never
      collapses into "light card with light text" when --ink flips in dark mode. */
@@ -102,6 +107,8 @@
   --on-accent: #201509;
   --line: #3a3225;
   --line-strong: #4c4232;
+  --done: #58b384;
+  --done-tint: #1f2b22;
   /* In dark mode an emphasized card is an elevated warm-dark surface (lighter
      than the canvas so it stands out) with light text and an orange edge. */
   --inverse-bg: #2c2118;
@@ -240,4 +247,16 @@ hr {
   background: var(--paper);
   border: 1px solid var(--paper-edge);
   border-radius: var(--radius);
+}
+
+/* Theme-switch cross-fade (View Transitions API; harmless where absent). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 220ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

@@ -1,163 +1,163 @@
 # ConciseRoadmaps
 
-A free, static, highly visual software-engineering learning roadmap — built for a
-first-year student who knows **C through linked lists** and wants to become a
-**self-sufficient software engineer**: strong CS and systems fundamentals, real
-projects over passive study, and eventually ethical cybersecurity. Learn theory by
-using it. Everything is unlocked, always.
+The practice-first software-engineering roadmap that tells you what to do for the
+next hour.
 
-This is **not** a course platform, dashboard, streak tracker, or game. It is a clear,
-explorable map of what matters, why it matters, prerequisites, practical projects, and
-trustworthy resources.
+ConciseRoadmaps is built for a first-year CS student who knows C through linked
+lists, studies about seven hours a week on Windows, and wants to become a
+self-sufficient engineer with strong CS, systems, architecture, and ethical-security
+foundations. It is not a course dashboard. It is a calm, local-first learning
+instrument that turns a carefully tested curriculum into real work.
 
-## Screenshots
+## The experience
 
-> _Placeholder — add images to `docs/` and update these links._
->
-> - `docs/screenshot-roadmap.png` — the interactive branching graph
-> - `docs/screenshot-topic.png` — a topic reading page with its lab
-> - `docs/screenshot-mobile.png` — the mobile vertical roadmap
+![Today view: one concrete hour before the full roadmap](docs/screenshot-roadmap.png)
 
-## Highlights
+The first screen answers four questions immediately:
 
-- **Guided roadmap** — a single vertical learning tree that flows top-to-bottom from one
-  dominant “Start here” node through ten ordered phases. Each phase says why it comes
-  now, its hours and branches, and a clear next direction; phases expand to reveal their
-  ordered topics. Milestones sit next to the phase that unlocks them, cross-branch
-  prerequisites appear inside cards as “Also requires…” links, and optional
-  specializations hang off as restrained side branches. No pan/zoom canvas — just a
-  clear direction, identical in structure on mobile (one clean column).
-- **Browse all topics** — a toggle (an accessible segmented control) flips to the full
-  catalog: every branch, topic, and milestone, with a branch jump list.
-- **Rich topic pages** — summary, why-it-matters, prerequisites, core ideas, practical
-  uses, a substantial hands-on **lab** (requirements, checkpoints, progressive hints,
-  validation, solution architecture, extensions), mastery checks, a **learning plan**
-  (Learn → Build → Prove) with one verified guided resource and exact instructions,
-  alternative explanations, practice tools, collapsed extra reading, a security note,
-  and connections to later topics.
-- **11 cross-branch milestone projects** with full briefs (no copy-paste source code).
-- **Global search** (button or <kbd>Ctrl/Cmd</kbd>+<kbd>K</kbd>) — a fully accessible
-  combobox dialog (focus-trapped, inert background, focus restored on close) over
-  titles, concepts, languages, projects, and resource names, with branch / required /
-  difficulty / hours filters. Result counts are always honest; every match is reachable
-  via “Show all”.
-- **Responsive, accessible, keyboard-navigable**, with optional dark mode. Both themes
-  pass WCAG AA contrast for text (checked by `npm run check:contrast`); focus is
-  managed deterministically on every route change.
-- **Fast first load** — the initial bundle carries only code and a lightweight
-  curriculum index (~72 kB gzip JS); the full topic/milestone prose loads lazily on
-  detail routes and first search.
-- **No backend, database, auth, telemetry, AI, or remote fetch.** Hash-based routing so
-  it deploys anywhere static. No heavyweight diagram library — the roadmap is built from
-  semantic HTML and CSS.
+- What should I learn next?
+- Why does it come now?
+- What can I do in the next 60 minutes?
+- How does that hour fit a seven-hour study week?
 
-## Tech stack
+The answer is always grounded in the real prerequisite graph. A fresh learner starts
+with “How Source Code Becomes a Running Program”; a returning learner resumes the most
+recent incomplete topic; completed topics are skipped along the required trunk.
 
-Vite · React · TypeScript · CSS custom properties (no Tailwind) · Vitest.
+## Focus sessions
 
-## Getting started
+![Focus session: Learn, Build, Prove, and a private build journal](docs/screenshot-topic.png)
+
+“Plan my next hour” opens a focused Learn → Build → Prove workspace:
+
+1. **Learn** for 10–20 minutes using the topic’s verified primary resource and exact
+   viewing/reading guidance.
+2. **Build** for 30–40 minutes toward the first unfinished checkpoint in the topic’s
+   real lab. One progressive hint is available only after an honest attempt.
+3. **Prove** for 10 minutes with the first unfinished mastery check—answered aloud,
+   sketched, or written without notes.
+
+The three tasks stay fixed for the current visit so checks do not move under the
+learner. On the next visit, the plan advances to the next unfinished lab checkpoint,
+validation step, and mastery check. Time spent never marks a topic complete; the
+learner makes that judgment after producing evidence.
+
+Each topic also has a private build journal for surprises, blockers, and the next
+attempt. Journal text and session checks live only in the browser.
+
+## The journey underneath
+
+The orientation layer sits above—never instead of—the inherited curriculum:
+
+- **78 topic clusters across 12 branches**
+- **10 tested phases** that form a genuine topological ordering of the prerequisite graph
+- **11 cross-branch milestone projects** with requirements, architecture, checkpoints,
+  tests, progressive hints, and solution outlines (never paste-ready project code)
+- A hand-audited catalog of real resources with exact titles, URLs, providers, and
+  topic-specific guidance
+- A substantial practical lab and mastery checks for every topic
+
+The guided journey can be expanded phase by phase. “Browse all” exposes the complete
+catalog with branch and completion filters. Global search (`Ctrl/Cmd + K`) indexes
+topics, concepts, labs, projects, languages, and resources.
+
+## Learner-owned memory
+
+Completion marks, recent topics, session checks, and journal entries are local-first:
+
+- no account, backend, telemetry, streak, XP, leaderboard, or deadline;
+- guarded `localStorage` with an in-memory fallback when storage is unavailable;
+- cross-tab updates;
+- one versioned JSON export containing all learner data;
+- backward-compatible import of the previous completion-only format;
+- one reset that erases completions, recents, session checks, and journal entries.
+
+Progress is deliberately a memory aid, not a score. Optional side branches never block
+100% of the required path.
+
+## Accessibility and responsive behavior
+
+![The same Today view at 320 px](docs/screenshot-mobile.png)
+
+- Keyboard-only parity, deterministic route focus, skip link, modal focus trapping,
+  and screen-reader coherent names and status announcements
+- WCAG AA text contrast in light and dark themes, checked from the actual CSS tokens
+- Reduced-motion support for every transition
+- A single-column experience from 320 px upward with no page-level horizontal overflow
+- Touch-friendly controls and an accessible search combobox
+
+## Run it
+
+Requires Node 18+.
 
 ```bash
-npm install       # install dependencies
-npm run dev       # start the dev server (Vite)
-npm run test      # run the data + behavior tests (Vitest)
-npm run build     # type-check and produce a static build in dist/
-npm run preview   # preview the production build locally
+npm install
+npm run dev
+npm run test
+npm run check:contrast
+npm run build
+npm run preview
 ```
 
-Requires Node 18+ (developed on Node 24). No environment variables, services, or
-secrets are needed.
+No environment variables, services, accounts, or secrets are required.
 
 ## Architecture
 
-```
+```text
 src/
-  data/                 # all curriculum content + types (no UI imports)
-    types.ts            # Topic / Lab / Resource / Milestone / Branch interfaces
-    branches.ts         # the 12 branches and their accent colors
-    resourceCatalog.ts  # the curated resource library (URLs live here once)
-    topics/
-      meta/             # one file per branch: the EAGER half (title, summary,
-                        #   hours, prerequisites) that list views and search need
-      body/             # one file per branch: the LAZY half (labs, resources,
-                        #   mastery checks) loaded only on detail routes/search
-      lite.ts           # eager index over metas (+ derived nextIds, totals)
-      index.ts          # heavy join of meta+body into full Topics (lazy chunks
-                        #   and tests only; throws on any meta/body mismatch)
-    milestonesLite.ts   # eager milestone cards (id, title, brief, unlockedBy)
-    milestones.ts       # the 11 full cross-branch capstone briefs (lazy join)
-    curriculum.ts       # eager public aggregator (start point, totals, labels)
-    search.ts           # search index + filterable query function (lazy chunk)
-    *.test.ts           # data-integrity and search behavior tests
-    phases.ts           # the guided learning path (ordered phases over topic ids)
-  components/           # React UI
-    roadmap/            # GuidedRoadmap, VerticalRoadmap (browse), Legend
-    ViewSwitch, Header, SearchModal, TopicDetail, MilestoneDetail, ResourceLibrary, About
-  lib/                  # hash router, theme hooks, modal a11y, search paging
-  styles/               # global tokens + per-area CSS (custom properties)
+  data/
+    topics/meta/          eager card and prerequisite data, one file per branch
+    topics/body/          lazy labs, resources, and mastery content
+    phases.ts             the tested ten-phase guided order
+    milestones*.ts        eager milestone cards + lazy full briefs
+    resourceCatalog.ts    verified resource identity and URLs
+  components/
+    FocusDesk.tsx         current topic, next-hour shape, weekly horizon
+    StudySession.tsx      Learn → Build → Prove workspace and journal
+    TopicDetail.tsx       complete topic, lab, resources, and connections
+    roadmap/              guided journey and full catalog
+  lib/
+    focusPlan.ts          pure next-session derivation over real topic content
+    practiceStore.ts      local session evidence and journal
+    learnerData.ts        portable v2 export/import over all learner state
+    progress*.ts          completion, readiness, resume, and local progress
+  styles/                 CSS tokens and route-level editorial layouts
 ```
 
-**Key idea:** curriculum data is fully separate from UI and validated by tests. The
-guided roadmap (`phases.ts`) and the browse catalog are two views of the same typed
-data. `nextIds` are *derived* from `prerequisiteIds`, and the guided path's ordering is
-tested to be a genuine topological sort of the prerequisite graph, so nothing can drift.
-Each topic is authored in two halves — eager meta and lazy body — joined by
-`topics/index.ts`, which throws (and tests fail) if the halves ever disagree, so the
-bundle split can't silently lose content.
+The eager/lightweight and lazy/prose halves of every topic are joined by id. The join
+throws if either half is missing. Reverse prerequisite links are derived, never
+hand-authored.
+
+## Tests and curriculum integrity
+
+`npm run test` runs 99 tests over the real curriculum and learning machinery. They
+cover unique ids, populated fields, resource identity, valid HTTPS URLs, the acyclic
+prerequisite graph, phase topological ordering, milestone placement, search, progress,
+portable learner data, and focus-session advancement.
+
+`npm run build` adds strict TypeScript checking. `npm run check:contrast` checks every
+foreground/background token pair in both themes. `npm run audit:resources` is the
+optional network-dependent catalog audit; its latest evidence is in
+[RESOURCE_AUDIT.md](RESOURCE_AUDIT.md).
 
 ## Editing the curriculum
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide. In short:
+Read [CURRICULUM.md](CURRICULUM.md) for the learning philosophy and
+[CONTRIBUTING.md](CONTRIBUTING.md) for the authoring rules. In short: edit the topic’s
+eager meta half and lazy body half under the same permanent id, maintain only
+`prerequisiteIds`, reuse verified catalog resources, and run the tests.
 
-- Add or edit a topic's lightweight half in `src/data/topics/meta/<branch>.ts`
-  (title, summary, hours, prerequisites) and its content half in
-  `src/data/topics/body/<branch>.ts` (lab, resources, mastery checks), keyed by
-  the same topic id.
-- Only maintain `prerequisiteIds`; `nextIds` are computed for you.
-- Run `npm run test` — the integrity suite tells you (readably) if any id, reference,
-  required field, resource, or milestone link is wrong, or if you introduced a cycle.
+## Deployment
 
-The curriculum philosophy (required vs. optional policy, milestone relationships) is in
-[CURRICULUM.md](CURRICULUM.md).
+The finished app is published privately at
+[concise-roadmaps-study.besnikmanushi.chatgpt.site](https://concise-roadmaps-study.besnikmanushi.chatgpt.site).
 
-## Testing
-
-`npm run test` runs Vitest over `src/data/*.test.ts`, verifying: unique ids; every
-prerequisite / next / milestone reference exists; the prerequisite graph is acyclic;
-required fields are populated; every topic has a guided primary resource (video,
-course, interactive tutorial, or lab — documented exceptions aside) with valid https
-URLs, a lab, and mastery checks; the resource catalog has unique ids and URLs; and that search indexes topics, concepts, projects, and
-resources. A dedicated `guided.test.ts` verifies the guided roadmap: every topic id
-exists, every topic appears exactly once, the phase ordering is a genuine topological
-sort (no topic precedes a prerequisite), and every milestone sits at/after the phase
-that unlocks it. `npm run build` additionally runs `tsc` for full type-checking.
-
-`npm run audit:resources` (optional, network) opens every resource URL with timeouts
-and limited concurrency, verifies YouTube links via oEmbed, and reports dead links —
-kept separate from `npm run test` because external sites can be temporarily down.
-See `RESOURCE_AUDIT.md` for the latest full audit.
-
-## Deploying to GitHub Pages
-
-The build is relocatable (`base: "./"` in `vite.config.ts`) and uses hash routing, so
-no server rewrites are needed.
-
-**Manual:**
-
-```bash
-npm run build
-# publish the dist/ folder to the gh-pages branch, e.g. with:
-npx gh-pages -d dist
-```
-
-Then in your repo: **Settings → Pages → Build and deployment → Deploy from a branch →
-`gh-pages` / root**.
-
-**Automated (optional):** a ready workflow lives at
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). Enable **Settings →
-Pages → Source: GitHub Actions**, and every push to `main` will test, build, and
-publish. See [HANDOFF.md](HANDOFF.md) for anything outstanding.
+The build remains a static Vite app with relative assets and hash routing. A tiny
+generated Worker entrypoint in `dist/server/index.js` delegates requests to the static
+asset binding for Sites hosting; no learner data or application logic moved to a
+backend. The same `dist/` can still be served from GitHub Pages or any static host
+without rewrite rules, and the existing Pages workflow remains available.
 
 ## License
 
-[MIT](LICENSE) — free to use, adapt, and share.
+[MIT](LICENSE)

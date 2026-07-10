@@ -1,177 +1,160 @@
-# Handoff Notes
+# Product handoff — July 10, 2026
 
-For the next contributor. The product is **complete and working**: `npm install`,
-`npm run dev`, `npm run test` (61 passing), `npm run build`, `npm run check:contrast`,
-and `npm run audit:resources` all succeed. The app was verified rendering at desktop
-and 320 px mobile widths, with the guided path (10 phases), browse view, topic and
-milestone pages, and search all functional. This file records what the July 2026
-remediation + Software Architecture effort changed, with evidence, plus genuine
-remaining tasks.
+ConciseRoadmaps is complete and working as a learner-first study instrument. This file
+describes the current product, the reasoning behind the reimagining, the evidence used
+to verify it, and the next highest-leverage work.
 
-## July 2026 remediation — completed, with evidence
+## What changed
 
-All eight release-blocking items from the previous handoff were completed in one
-coherent effort (toolchain → data split → accessibility/contrast → new branch → docs):
+### 1. The roadmap now starts with today
 
-1. **Test toolchain upgraded.** Vitest 2.1.9 → **4.1.9** (the version `npm audit`
-   recommended at implementation time; its peer range accepts Vite ^6, so Vite stayed
-   at 6.4.3). `npm audit` now reports **0 vulnerabilities total** — dev and production.
-   The `react() as never` cast in `vite.config.ts` was removed; the type clash is gone
-   with aligned versions. Full suite and build green on the new runner.
-2. **Search is a real accessible modal.** New `src/lib/useModal.ts` provides a focus
-   trap (Tab/Shift+Tab cycle inside), makes everything outside the dialog `inert`,
-   locks background scroll, and restores focus to the exact trigger on close — except
-   when closing via navigation, where the route-focus handler takes over (verified:
-   Escape returns focus to the header search button; Enter lands focus on `<main>`).
-3. **One correct search interaction model.** The input is a `role="combobox"` with
-   `aria-expanded`, `aria-autocomplete="list"`, and `aria-activedescendant` pointing at
-   stable option ids (`sr-{kind}-{id}`); options are plain `role="option"` list items
-   (no nested buttons); the empty state renders outside the listbox; a `role="status"`
-   line announces counts. Arrow keys, Enter, pointer hover, and announcements agree.
-4. **No nested interactive elements.** `GuidedRoadmap.tsx` topic cards are now a
-   non-interactive wrapper containing the topic `<button>` and a **sibling** "Also
-   requires" paragraph of real `<a href="#/topic/…">` anchors (hash routing makes
-   plain anchors correct). The `role="link"`/`tabIndex`/`stopPropagation` hack is gone.
-5. **WCAG AA contrast passes in both themes**, enforced by `npm run check:contrast`
-   (`scripts/check-contrast.mjs` reads the actual hex values from `global.css` and
-   checks 17 fg/bg pairs per theme). Changes: new `--accent-bg`/`--on-accent` tokens
-   (light: white on `#b5401c` = 5.65:1; dark: near-black `#201509` on `#e8683c` =
-   5.52:1 — the bright dark-mode orange is preserved by flipping the text dark instead
-   of darkening the orange); light `--ink-faint` `#79715f` → `#6b634e`; dark
-   `--orange-deep` `#cf5227` → `#e0602e`; `a:hover` and prerequisite-link hovers no
-   longer use bare `--orange` as text; `.lab__label` no longer renders white-on-light
-   in dark mode. `--orange` remains for decorative borders/rails/focus rings (3:1 UI
-   floor, passes).
-6. **SPA route focus is deterministic.** The roadmap early-return in `App.tsx` is gone:
-   every route *change* (tracked via a previous-route ref; initial mount excluded)
-   focuses `<main>` (`preventScroll`) and resets scroll. Verified for forward
-   navigation, back to roadmap, and navigation out of search.
-7. **Search never silently truncates.** The full result set is computed; rendering is
-   paged at 40 with a truthful `"Showing 40 of N results"` status and a
-   "Show all N results" button that reaches every match (verified live: 82-result
-   query). Pure helpers in `src/lib/searchPaging.ts` are unit-tested.
-8. **Curriculum meta/body split.** Topics are authored in two halves —
-   `src/data/topics/meta/{branch}.ts` (eager: title, summary, hours, prerequisites) and
-   `src/data/topics/body/{branch}.ts` (lazy: labs, resources, mastery checks) — joined
-   by `topics/index.ts`, which **throws naming the offending id** on any mismatch
-   (also covered by tests). Milestones are split the same way
-   (`milestonesLite.ts` / `milestones.ts`). `TopicDetail`, `MilestoneDetail`,
-   `ResourceLibrary`, and `SearchModal` are `React.lazy` chunks; search keeps its full
-   haystack (lab text + resource titles) by living in the lazy graph.
+The inherited product opened with a large curriculum overview. It was accurate but
+asked a fresh learner to orient inside 78 topics before receiving a concrete action.
+The new `FocusDesk` inverts that order:
 
-**Bundle sizes (raw / gzip), measured from `dist/`:**
+- selects the best current topic from completion + recency state;
+- names its phase and exact place on the 70-topic required trunk;
+- turns it into a visible 60-minute Learn → Build → Prove rhythm;
+- normalizes that a 6–12 hour topic can span several weeks;
+- shows the full tested journey only after the next action is clear.
 
-| | Before | After split (72 topics) | After adding the arch branch (78 topics) |
-|---|---|---|---|
-| Eager JS | 661.29 kB / 220.82 kB | 218.60 kB / 70.58 kB | **222.86 kB / 71.86 kB** |
-| Lazy curriculum JS | — | 394.31 + 32.60 kB / 138.29 + 12.13 kB | 439.66 + 38.15 kB / 154.19 + 14.19 kB |
+A fresh learner can identify the topic and click “Plan my next hour” from the first
+viewport. The original guided and browse views remain intact below it.
 
-Adding ~45 kB raw of new curriculum prose moved the eager bundle by only ~1.3 kB gzip —
-the split did its job. (Baseline: 49 tests before this effort, not the previously
-claimed 33; 61 after.)
+### 2. Focus sessions turn content into evidence
 
-## Software Architecture branch — added
+The new `StudySession` route (`#/session/:topicId`) uses the topic’s real content—never
+generated filler:
 
-A dedicated **Software Architecture** branch (`arch`, berry accent `--b-arch: #a04b73`)
-now sits as guided **phase 9** between Software-Engineering Practice (8) and Security
-(renumbered 10). Seven required topics (~73 h), every lab evolving the learner's own
-full-stack issue tracker with an escape hatch for divergent projects, and mini-ADRs
-required from stage 2 onward:
+- the verified primary resource and exact guidance for Learn;
+- the first unfinished lab checkpoint, then validation list, for Build;
+- the first unfinished mastery check for Prove;
+- one progressive hint behind an explicit “after a real attempt” disclosure;
+- a private per-topic build journal;
+- an honest topic-completion control, separate from the hour’s checklist.
 
-1. `arch-modularity` — modularity, coupling/cohesion, dependency direction (audits the
-   tracker's real dependency graph)
-2. `arch-boundaries` — ports & adapters, dependency inversion (absorbs the retired
-   `se-architecture` swappable-core lab and its trust-boundary security note)
-3. `arch-data-contracts` — API versioning, data ownership, expand/migrate/contract
-   schema evolution (absorbs se-architecture's API-versioning material)
-4. `arch-system-shapes` — modular monolith vs. services vs. event-driven; extracts
-   exactly one async seam with an ADR for why the rest stays a monolith
-5. `arch-reliability` — timeouts, retries with backoff/jitter, idempotency, degraded
-   modes, scripted failure drill
-6. `arch-observability` — structured logs with correlation ids across the queue hop,
-   golden signals, measure→fix→prove performance loop
-7. `arch-evolution` — ADR log, fitness functions in CI, strangler-fig migration with
-   the first slice executed
+The pure `createFocusPlan` engine gives a fresh session 20/30/10 minutes and later
+sessions 10/40/10. Tasks are frozen for the current visit so checking an item never
+makes the UI jump. Returning to the session advances to the next authentic checkpoint.
 
-New milestone `m-architecture-evolution` ("Issue Tracker: Architecture Evolution",
-phase 9, integrates arch/backend/practice) requires the decision log with explicit
-quality attributes, enforced boundaries with tests at them, observability, a scripted
-failure/recovery exercise, and an executed migration slice — and its non-goals forbid
-gratuitous microservices/infrastructure.
+### 3. Privacy now covers the new learning data
 
-**Consolidation:** `se-architecture` was removed from the practice branch (nothing
-teaches the same material twice). Rewired: `se-ci-docker-deploy` prereqs →
-`se-testing-strategy` + `systems-processes`; `opt-enterprise` and
-`m-security-capstone.unlockedBy` → `arch-boundaries`; the `m-fullstack-issue-tracker`
-brief no longer references "your architecture lab" (softened to testing-strategy
-seams). Zero `se-architecture` references remain in `src/`.
+`practiceStore.ts` persists session checks and journal text locally, with the same
+memory fallback and cross-tab behavior as progress. `learnerData.ts` creates a v2 JSON
+backup containing:
 
-**Resources:** 13 new catalog entries, every URL opened and verified 2026-07-06
-(YouTube via oEmbed with exact title/channel recorded; see `RESOURCE_AUDIT.md` for the
-per-resource decision table). All seven primaries are guided (video/course). Existing
-anchors (Ousterhout, Ian Cooper, refactoring.guru, FastAPI docs, OSTEP, MIT 6.824,
-SRE-adjacent) were reused with topic-specific guidance rather than duplicated.
-`stripe.com` was added to the audit script's `MANUAL_HOSTS` (rate-limits scripts with
-HTTP 429; verified by hand).
+- completed topics and milestones;
+- recent topics;
+- focus-session evidence;
+- journal entries.
 
-Totals now: **78 topics** (55–80 test bound), **12 branches**, **11 milestones**,
-**10 guided phases**, catalog **108 entries**, **61 tests**.
+The importer still accepts the previous v1 completion-only file. Reset erases every
+one of these surfaces. The redundant `cr:last-topic` key was removed, so there is no
+orphaned local learner data.
 
-## Concrete remaining tasks (nice-to-have)
+### 4. The interface became a workbench
 
-1. **Add real screenshots.** `README.md` references `docs/screenshot-*.png` that don't
-   exist yet. Run the dev server, capture the guided roadmap, a topic page, and the
-   mobile roadmap, save them to `docs/`, and the README links light up.
-   - Acceptance: three images exist and render in the README.
+The editorial paper language remains, but the first viewport is now a high-contrast
+ink-and-orange study desk: oversized topic typography, a concrete hour card, and a
+three-part learning horizon. The session view uses the same visual grammar with a
+single reading column, fixed task hierarchy, and a generous build-journal surface.
 
-2. **DOM-level automated a11y tests.** The modal/focus behavior was verified manually
-   and in a live browser this round (tests run in `environment: "node"`). If you want
-   it regression-proof, add `jsdom` + `@testing-library/react` with a per-file
-   `// @vitest-environment jsdom` SearchModal test (focus trap, activedescendant,
-   restore-on-close). Deliberately not done in the same pass as the Vitest major
-   upgrade.
+The header vocabulary now matches learner intent: **Today, Journey, Library, Method**.
+Both themes still use the tested token system. The 320 px version collapses cleanly
+without page-level horizontal overflow.
 
-3. **`craftinginterpreters.com` audit flake.** During the 2026-07-06 audit run this
-   pre-existing URL failed with a network-level fetch error (as did `sourceware.org`,
-   which verified fine minutes later). Both are almost certainly transient; re-run
-   `npm run audit:resources` before assuming link rot.
+## What was deliberately kept
 
-4. **PWA / offline install** (explicitly deprioritized by the brief). If wanted, add
-   `vite-plugin-pwa` with a manifest and service worker. The app is fully static and
-   client-side, so this is straightforward.
-   - Acceptance: installable, works offline after first load; tests unaffected.
+- All 78 topic clusters, ids, prerequisite relationships, labs, mastery checks, and
+  summaries
+- All 11 milestone briefs and their no-paste-ready-code policy
+- The ten-phase topological guided order and optional side branches
+- The resource catalog and audit trail—no titles, providers, durations, or URLs were
+  invented or changed
+- Search, resource library, full topic pages, milestone pages, browse filters, theme,
+  completion controls, and progress derivations
+- Static, local-first architecture with no account, backend, AI tutor, or telemetry
+- Keyboard, screen-reader, reduced-motion, and two-theme contrast guarantees
 
-## Known limitations (by design, not bugs)
+## What was rejected this round
 
-- **No progress tracking / accounts / quizzes / streaks.** Intentional per the brief.
-  Only theme and last-opened-topic are stored locally.
-- **Dark mode** exists (toggle in the header) and is treated as optional polish; both
-  themes pass the AA text-contrast check.
-- **Resource links are not link-checked in CI.** `npm run audit:resources` is manual
-  (network-dependent); bot-blocking hosts (`martinfowler.com`, `atlassian.com`,
-  `learn.microsoft.com`, `stripe.com`) are flagged for manual verification, never
-  auto-marked broken.
-- **A brief "Loading…" flash** can appear on the first visit to a detail route or
-  first search open while the lazy curriculum chunk loads — the deliberate cost of
-  the small initial bundle. Chunks are shared, so it happens once.
+- **In-browser compilers/WASM.** Impressive, but maintaining trustworthy C, Python,
+  JavaScript, and SQL runtimes would have displaced work on orientation and practice.
+  The first hour was the higher-leverage problem.
+- **An LLM tutor.** The existing AI creed is strong, but a production tutor needs a
+  carefully enforced critique/quiz boundary, explicit network disclosure, and an
+  offline fallback. Shipping a thin chat wrapper would weaken learner dignity.
+- **Streaks, XP, deadlines, and scheduled notifications.** They conflict with the
+  product’s memory-aid model and a seven-hour week that will naturally fluctuate.
+- **A backend/account system.** No collaboration or sync requirement justified moving
+  private notes off the learner’s device.
+- **A PWA in this pass.** Useful, but less important than proving the new session loop.
+  The current static architecture makes it a contained next step.
 
-## Where things live (quick map)
+## Verification evidence
 
-- Curriculum content & types: `src/data/` (see the README architecture section for the
-  meta/body split).
-- Eager curriculum index: `src/data/topics/lite.ts`; heavy join: `src/data/topics/index.ts`.
-- Guided learning path (ordered phases): `src/data/phases.ts`.
-- Guided roadmap UI: `src/components/roadmap/GuidedRoadmap.tsx`.
-- Browse catalog: `src/components/roadmap/VerticalRoadmap.tsx`.
-- Topic/milestone reading: `src/components/TopicDetail.tsx`, `MilestoneDetail.tsx` (lazy).
-- Search: `src/data/search.ts` + `src/components/SearchModal.tsx` (lazy chunk).
-- Modal accessibility: `src/lib/useModal.ts`; search paging: `src/lib/searchPaging.ts`.
-- Contrast audit: `scripts/check-contrast.mjs` (`npm run check:contrast`).
-- Resource audit: `scripts/audit-resources.mjs` (`npm run audit:resources`) + `RESOURCE_AUDIT.md`.
-- Tests: `src/data/curriculum.test.ts`, `search.test.ts`, `guided.test.ts`,
-  `src/lib/searchPaging.test.ts`.
-- Deploy: `.github/workflows/deploy.yml` (enable Pages → Source: GitHub Actions).
+Completed against the production build:
 
-All curriculum-integrity invariants are enforced by tests, so curriculum edits are safe:
-a broken reference, cycle, missing field, unlinked milestone, or meta/body mismatch
-fails `npm run test` with a message naming the exact id and field.
+- `npm run test` — 99 passing tests across 7 files
+- `npm run build` — strict TypeScript + Vite production build
+- `npm run check:contrast` — every declared text/UI pair passes in both themes
+- Browser-driven desktop verification of Today → session → check all three tasks →
+  journal save → return → next session advancement
+- Browser-driven 320 × 800 verification with no document-level horizontal overflow
+- Fresh screenshots captured from the real finished app into `docs/`
+- Private Sites deployment saved from the exact validated commit and published at
+  `https://concise-roadmaps-study.besnikmanushi.chatgpt.site`
+
+The focus machinery adds eight tests covering exact 60-minute composition, real
+resource/checkpoint/mastery selection, checkpoint → validation advancement, stored
+step validation, local fallback/reset, v2 round-trip, and v1 import compatibility.
+
+## Exact commands
+
+```bash
+npm install
+npm run dev
+npm run test
+npm run check:contrast
+npm run build
+npm run preview
+```
+
+Optional network audit:
+
+```bash
+npm run audit:resources
+```
+
+## Important files
+
+- `src/components/FocusDesk.tsx` — first-viewport orientation
+- `src/components/StudySession.tsx` — the active learning workspace
+- `src/lib/focusPlan.ts` — pure session-selection logic
+- `src/lib/practiceStore.ts` — session evidence + journal persistence
+- `src/lib/learnerData.ts` — complete export/import/reset boundary
+- `src/lib/progress.ts` — required-trunk and milestone progress logic
+- `src/data/phases.ts` — guided topological order
+- `src/data/topics/` — split curriculum source of truth
+- `scripts/check-contrast.mjs` — theme token audit
+- `scripts/prepare-sites.mjs` — generated static-asset Worker entry for private hosting
+- `.openai/hosting.json` — opaque Sites project identity only
+
+## If another week were available
+
+1. **Retrieval queue.** Schedule completed mastery checks for learner-controlled review
+   using a transparent Leitner-style model—no streak, no guilt, and a “why today?”
+   explanation for every prompt.
+2. **Lab evidence attachments.** Let the learner store a local path/reference, commit
+   hash, or short test transcript beside each checkpoint, included in export.
+3. **Offline install.** Add a small, testable service worker and manifest; pre-cache the
+   shell plus curriculum chunks and clearly report offline resource-link limitations.
+4. **DOM accessibility regression tests.** Add focused tests for session check states,
+   journal labels, route focus, and export/reset dialogs in addition to the existing
+   browser verification.
+5. **Skill snapshot.** A private, editable “I can explain / build / debug” snapshot that
+   uses produced evidence, not time or self-rating alone, to help choose optional paths.
+
+The next contributor should preserve the core constraint introduced here: a focus
+session may select and stage curriculum truth, but it must never invent an exercise,
+mark understanding on the learner’s behalf, or turn elapsed time into mastery.

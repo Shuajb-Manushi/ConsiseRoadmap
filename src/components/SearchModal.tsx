@@ -4,6 +4,7 @@ import type { BranchId, Difficulty } from "../data/types";
 import { searchCurriculum, type SearchFilters, type SearchDoc } from "../data/search";
 import { branches } from "../data/branches";
 import { useModal } from "../lib/useModal";
+import { useProgress } from "../lib/useProgress";
 import { SEARCH_PAGE_SIZE, visibleSlice, resultsStatus } from "../lib/searchPaging";
 import "../styles/search.css";
 
@@ -32,7 +33,9 @@ export function SearchModal({
     required: "all",
     difficulty: "all",
     maxHours: null,
+    completion: "all",
   });
+  const { done } = useProgress();
   const [active, setActive] = useState(0);
   const [visibleCount, setVisibleCount] = useState(SEARCH_PAGE_SIZE);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -44,7 +47,7 @@ export function SearchModal({
   }, []);
 
   // The FULL result set — never silently truncated. Only rendering is paged.
-  const results = useMemo(() => searchCurriculum(query, filters), [query, filters]);
+  const results = useMemo(() => searchCurriculum(query, filters, done), [query, filters, done]);
   const visible = visibleSlice(results, visibleCount);
 
   useEffect(() => {
@@ -153,6 +156,17 @@ export function SearchModal({
             </select>
           </label>
           <label className="search-filter">
+            <span>Progress</span>
+            <select
+              value={filters.completion}
+              onChange={(e) => patch({ completion: e.target.value as SearchFilters["completion"] })}
+            >
+              <option value="all">Any progress</option>
+              <option value="remaining">Still to do</option>
+              <option value="completed">Completed</option>
+            </select>
+          </label>
+          <label className="search-filter">
             <span>Hours</span>
             <select
               value={filters.maxHours ?? ""}
@@ -198,7 +212,15 @@ export function SearchModal({
                 {doc.difficulty && <span className="search-result__diff">{doc.difficulty}</span>}
                 {doc.estimatedHours > 0 && <span className="search-result__diff">~{doc.estimatedHours}h</span>}
               </span>
-              <span className="search-result__title">{doc.title}</span>
+              <span className="search-result__title">
+                {doc.title}
+                {done.has(doc.id) && (
+                  <>
+                    <span className="search-result__done" aria-hidden="true"> ✓</span>
+                    <span className="visually-hidden"> (completed)</span>
+                  </>
+                )}
+              </span>
               <span className="search-result__summary">{doc.summary}</span>
             </li>
           ))}

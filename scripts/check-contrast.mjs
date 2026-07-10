@@ -75,6 +75,12 @@ const PAIRS = [
   ["inverse-fg", "inverse-bg", TEXT, "milestone cards"],
   ["inverse-muted", "inverse-bg", TEXT, "milestone card briefs"],
   ["orange", "inverse-bg", TEXT, "milestone card tag/CTA"],
+  ["done", "canvas", TEXT, "completed labels, phase meters"],
+  ["done", "canvas-deep", TEXT, "side-branch done counts"],
+  ["done", "paper", TEXT, "completed labels on cards"],
+  ["done", "done-tint", TEXT, "completed chip text on its tint"],
+  ["paper", "done", TEXT, "check glyph on a completed fill"],
+  ["ink", "done-tint", TEXT, "completion card body text"],
   // Decorative / large UI affordances (3:1 floor)
   ["orange", "canvas", UI, "focus rings, rails, borders"],
   ["line-strong", "canvas", 1.2, "hairlines (non-essential)"],

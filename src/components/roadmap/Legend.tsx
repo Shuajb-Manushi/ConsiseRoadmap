@@ -9,6 +9,7 @@ export function Legend() {
         <span className="legend__item"><span className="legend__swatch legend__swatch--optional" />Optional</span>
         <span className="legend__item"><span className="legend__swatch legend__swatch--later" />Later / specialization</span>
         <span className="legend__item"><span className="legend__swatch legend__swatch--milestone" />Milestone project</span>
+        <span className="legend__item"><span className="legend__swatch legend__swatch--done" aria-hidden="true">✓</span>Completed (local)</span>
       </div>
       <div className="legend__group">
         <span className="legend__heading">Branches</span>

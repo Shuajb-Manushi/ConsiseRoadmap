@@ -10,6 +10,44 @@
   line-height: 1.55;
 }
 
+/* A compact reading compass keeps long topic pages navigable without turning
+   them into a dashboard. It lives only in the lazy detail route. */
+.topic-compass {
+  position: sticky;
+  top: calc(var(--s6) + 42px);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s3);
+  max-width: 74ch;
+  margin: 0 0 var(--s6);
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--line);
+  background: var(--canvas);
+  border-radius: var(--radius);
+}
+.topic-progress { display: inline-flex; align-items: center; gap: var(--s2); min-width: 96px; }
+.topic-progress__label { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-faint); white-space: nowrap; }
+.topic-progress__track { width: 42px; height: 4px; overflow: hidden; background: var(--line); border-radius: 99px; }
+.topic-progress__fill { display: block; height: 100%; background: var(--orange); border-radius: inherit; transition: width 120ms linear; }
+.topic-compass__nav { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 2px; }
+.topic-compass__label { color: var(--ink-faint); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; margin-right: var(--s1); }
+.topic-compass__nav button,
+.topic-compass__copy {
+  border: none;
+  border-radius: var(--radius);
+  padding: 4px 7px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.topic-compass__nav button:hover,
+.topic-compass__copy:hover { color: var(--ink); background: var(--paper); }
+.topic-compass__copy { margin-left: auto; color: var(--orange-deep); }
+.topic-compass__status { font-size: 0.76rem; color: var(--ink-faint); }
+
 .detail-section { margin-bottom: var(--s6); max-width: 74ch; }
 .detail-section h2 {
   font-size: 1.4rem;
@@ -82,6 +120,119 @@
   letter-spacing: 0.04em;
   color: var(--orange-deep);
   width: var(--s6);
+}
+
+/* ---------- Completion controls (detail pages) ----------
+   Real toggle buttons with aria-pressed; the visible label stays "Completed"
+   so voice-control names never drift from what's on screen. */
+.complete-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.complete-toggle:hover { border-color: var(--done); }
+.complete-toggle[aria-pressed="true"] {
+  border-color: var(--done);
+  background: var(--done-tint);
+  color: var(--done);
+}
+.complete-toggle__box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--line-strong);
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  color: transparent;
+  background: var(--paper);
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.complete-toggle:hover .complete-toggle__box { border-color: var(--done); }
+.complete-toggle[aria-pressed="true"] .complete-toggle__box {
+  background: var(--done);
+  border-color: var(--done);
+  color: var(--paper);
+  animation: checkPopDetail 200ms ease;
+}
+@keyframes checkPopDetail {
+  0% { transform: scale(0.82); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.complete-toggle--sm { padding: 3px 8px; font-size: 0.78rem; }
+.complete-toggle--sm .complete-toggle__box { width: 15px; height: 15px; font-size: 0.62rem; }
+
+.mastery-complete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3);
+  margin-top: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+}
+.mastery-complete__hint { margin: 0; color: var(--ink-soft); font-size: 0.92rem; max-width: 48ch; }
+
+.milestone-complete { margin-top: var(--s4); }
+.milestone-readiness { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: var(--s3); }
+.milestone-readiness--go { color: var(--done); font-weight: 600; }
+
+.pill__done { color: var(--done); font-weight: 700; }
+.pill--milestone .pill__done { color: var(--orange); }
+
+/* ---------- Guided-path pager ---------- */
+.topic-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s3);
+  margin-top: var(--s7);
+  padding-top: var(--s5);
+  border-top: 2px solid var(--ink);
+  max-width: 74ch;
+}
+.topic-pager__pos {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  font-family: var(--mono);
+}
+.topic-pager__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+  background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: var(--s3) var(--s4);
+  transition: border-color 0.12s ease, transform 0.08s ease;
+}
+.topic-pager__btn:hover { border-color: var(--ink); transform: translateY(-1px); }
+.topic-pager__btn--next { text-align: right; align-items: flex-end; border-color: var(--ink); }
+.topic-pager__kicker {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--orange-deep);
+}
+.topic-pager__title { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; color: var(--ink); }
+.topic-pager__spacer { display: block; }
+@media (max-width: 560px) {
+  .topic-pager { grid-template-columns: 1fr; }
+  .topic-pager__spacer { display: none; }
 }
 
 /* Pills for prerequisites / next / integrates */
@@ -274,4 +425,13 @@
 @media (max-width: 640px) {
   .lab { padding: var(--s4); }
   .detail-summary { font-size: 1.05rem; }
+  .topic-compass { position: static; align-items: flex-start; }
+  .topic-compass__copy { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topic-progress__fill { transition: none; }
+  .complete-toggle,
+  .complete-toggle__box { transition: none; }
+  .complete-toggle[aria-pressed="true"] .complete-toggle__box { animation: none; }
 }

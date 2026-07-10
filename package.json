@@ -6,7 +6,7 @@
   "description": "A free, static, highly visual software-engineering learning roadmap.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/prepare-sites.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "audit:resources": "node scripts/audit-resources.mjs",

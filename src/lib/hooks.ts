@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 
 /** Reactive media query. */
 export function useMediaQuery(query: string): boolean {
@@ -42,5 +43,21 @@ export function useTheme(): [Theme, () => void] {
     }
   }, [theme]);
 
-  return [theme, () => setTheme((t) => (t === "light" ? "dark" : "light"))];
+  // Theme switches cross-fade via the View Transitions API where available —
+  // a progressive enhancement that reduced-motion users never see.
+  const toggle = useCallback(() => {
+    const flip = () => setTheme((t) => (t === "light" ? "dark" : "light"));
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced && typeof document !== "undefined" && "startViewTransition" in document) {
+      (document as Document & {
+        startViewTransition: (cb: () => void) => void;
+      }).startViewTransition(() => flushSync(flip));
+    } else {
+      flip();
+    }
+  }, []);
+
+  return [theme, toggle];
 }

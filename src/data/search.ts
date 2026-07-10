@@ -104,15 +104,20 @@ export type SearchFilters = {
   required?: "all" | "required" | "optional";
   difficulty?: Difficulty | "all";
   maxHours?: number | null;
+  /** Filter by local completion state; needs the `done` set to have effect. */
+  completion?: "all" | "completed" | "remaining";
 };
 
 /**
  * Token-AND search: every whitespace-separated query token must appear
  * somewhere in the document. Empty query returns all docs (filtered).
+ * `done` is the caller's local completion set — search data itself stays
+ * progress-free so the index can be built once.
  */
 export function searchCurriculum(
   query: string,
-  filters: SearchFilters = {}
+  filters: SearchFilters = {},
+  done: ReadonlySet<string> = new Set()
 ): SearchDoc[] {
   const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
 
@@ -130,6 +135,9 @@ export function searchCurriculum(
     }
     if (filters.maxHours != null) {
       if (doc.estimatedHours > filters.maxHours) return false;
+    }
+    if (filters.completion && filters.completion !== "all") {
+      if ((filters.completion === "completed") !== done.has(doc.id)) return false;
     }
     return tokens.every((tok) => doc.haystack.includes(tok));
   });

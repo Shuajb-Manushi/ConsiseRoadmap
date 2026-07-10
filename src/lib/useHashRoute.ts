@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
+import { progressStore } from "./progressStore";
 
 export type Route =
   | { name: "roadmap" }
+  | { name: "session"; id: string }
   | { name: "topic"; id: string }
   | { name: "milestone"; id: string }
   | { name: "resources" }
   | { name: "about" };
 
-const LAST_TOPIC_KEY = "cr:last-topic";
-
 function parseHash(): Route {
   const raw = window.location.hash.replace(/^#\/?/, "");
   const [head, param] = raw.split("/");
   switch (head) {
+    case "session":
+      return param ? { name: "session", id: param } : { name: "roadmap" };
     case "topic":
       return param ? { name: "topic", id: param } : { name: "roadmap" };
     case "milestone":
@@ -33,6 +35,8 @@ export function routeToHash(route: Route): string {
   switch (route.name) {
     case "roadmap":
       return "#/roadmap";
+    case "session":
+      return `#/session/${route.id}`;
     case "topic":
       return `#/topic/${route.id}`;
     case "milestone":
@@ -48,20 +52,20 @@ export function useHashRoute() {
   const [route, setRoute] = useState<Route>(() => parseHash());
 
   useEffect(() => {
+    const remember = (r: Route) => {
+      if (r.name !== "topic") return;
+      progressStore.recordRecent(r.id);
+    };
     const onChange = () => {
       const next = parseHash();
       setRoute(next);
-      if (next.name === "topic") {
-        try {
-          localStorage.setItem(LAST_TOPIC_KEY, next.id);
-        } catch {
-          /* storage may be unavailable; non-critical */
-        }
-      }
+      remember(next);
     };
     window.addEventListener("hashchange", onChange);
     // normalize an empty hash on first load
     if (!window.location.hash) window.location.replace("#/roadmap");
+    // a deep link straight to a topic counts as "recently opened" too
+    remember(parseHash());
     return () => window.removeEventListener("hashchange", onChange);
   }, []);
 
@@ -70,12 +74,4 @@ export function useHashRoute() {
   }, []);
 
   return { route, navigate };
-}
-
-export function getLastTopicId(): string | null {
-  try {
-    return localStorage.getItem(LAST_TOPIC_KEY);
-  } catch {
-    return null;
-  }
 }

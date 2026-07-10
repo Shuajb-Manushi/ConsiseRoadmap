@@ -7,6 +7,7 @@
   justify-content: center;
   align-items: flex-start;
   padding: 10vh var(--s4) var(--s4);
+  animation: searchOverlayIn 150ms ease both;
 }
 .search-modal {
   width: 100%;
@@ -19,7 +20,10 @@
   flex-direction: column;
   max-height: 78vh;
   overflow: hidden;
+  animation: searchModalIn 180ms ease both;
 }
+@keyframes searchOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes searchModalIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 .search-input-row {
   display: flex;
   align-items: center;
@@ -144,3 +148,9 @@
   .search-modal { max-height: 88vh; }
   .search-filter { flex: 1; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .search-overlay, .search-modal { animation: none; }
+}
+
+.search-result__done { color: var(--done); font-weight: 700; }

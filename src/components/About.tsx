@@ -86,12 +86,19 @@ export function About({ navigate }: { navigate: (r: Route) => void }) {
       </section>
 
       <section className="prose-section">
-        <h2>What this is not</h2>
+        <h2>Progress, kept private</h2>
         <p>
-          There is no progress tracking, no accounts, no streaks, no XP, no badges, no dashboards,
-          and no cloud sync — by design. It's a static site with no backend, no telemetry, and no
-          data collection. Your only footprint is a remembered theme and last-opened topic, stored
-          locally in your own browser. The roadmap is the interface; the projects are the point.
+          You can mark topics and milestones complete — the ✓ on any card or page — and the
+          roadmap will show phase progress, milestone readiness, and where to pick up next.
+          All of it lives <strong>only in your browser's local storage</strong>: no accounts, no
+          cloud sync, no telemetry, and nothing leaves your machine. Use the export/import
+          buttons in the progress panel to carry it between devices as a plain JSON file, and
+          the reset control to erase it entirely.
+        </p>
+        <p>
+          There are still no streaks, XP, badges, or guilt mechanics — by design. Completion
+          marks are a memory aid for a months-long journey, not a score. The roadmap is the
+          interface; the projects are the point.
         </p>
         <div className="about-cta">
           <button className="btn btn--primary" onClick={() => navigate({ name: "topic", id: "code-to-program" })}>
